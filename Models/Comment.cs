@@ -7,10 +7,10 @@ namespace AmbroBlogProject.Models
 {
     public class Comment
     {
-        public int Id { get; set; }//PK
-        public int PostId { get; set; }//FK
-        public string AuthorId { get; set; }//FK
-        public string ModeratorId { get; set; }//FK
+        public int Id { get; set; } //PK
+        public int PostId { get; set; } //FK
+        public string BlogUserId { get; set; } //FK
+        public string ModeratorId { get; set; } //FK
 
         [Required]
         [StringLength(500, ErrorMessage ="The {0} must be at least {2} and no more than {1}", MinimumLength = 2)]
@@ -30,8 +30,8 @@ namespace AmbroBlogProject.Models
 
         // navigation  
         public virtual Post Post { get; set; }
-        public virtual IdentityUser Author { get; set; }
-        public virtual IdentityUser Moderator { get; set; }
+        public virtual BlogUser BlogUser { get; set; }
+        public virtual BlogUser Moderator { get; set; }
 
     }
 }

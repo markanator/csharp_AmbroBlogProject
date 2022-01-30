@@ -12,7 +12,7 @@ namespace AmbroBlogProject.Models
     {
         public int Id { get; set; }
         public int BlogId { get; set; }
-        public string AuthorId { get; set; }
+        public string BlogUserId { get; set; }
 
         [Required]
         [StringLength(75)]
@@ -45,7 +45,7 @@ namespace AmbroBlogProject.Models
 
         // navigation  
         public virtual Blog Blog { get; set; }
-        public virtual IdentityUser Author { get; set; }
+        public virtual BlogUser BlogUser { get; set; }
 
 
         public virtual ICollection<Tag> Tags { get; set; } = new HashSet<Tag>();
