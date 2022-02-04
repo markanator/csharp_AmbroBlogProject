@@ -11,7 +11,11 @@ namespace AmbroBlogProject.Models
     public class Post
     {
         public int Id { get; set; }
+
+        [Display(Name = "Blog Name")]
         public int BlogId { get; set; }
+
+        [Display(Name = "Author Name")]
         public string BlogUserId { get; set; }
 
         [Required]
