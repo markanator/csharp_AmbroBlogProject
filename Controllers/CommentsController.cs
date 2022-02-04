@@ -19,11 +19,32 @@ namespace AmbroBlogProject.Controllers
             _context = context;
         }
 
-        // GET: Comments
-        public async Task<IActionResult> Index()
+
+        public async Task<IActionResult> OriginalIndex()
         {
             var applicationDbContext = _context.Comments.Include(c => c.BlogUser).Include(c => c.Moderator).Include(c => c.Post);
             return View(await applicationDbContext.ToListAsync());
+        }
+
+        /*
+        public async Task<IActionResult> ModeratedIndex()
+        {
+            var modComments = _context.Comments.Where(c=>c.Moderated != null).Include(c => c.BlogUser).Include(c => c.Moderator).Include(c => c.Post);
+            return View(await modComments.ToListAsync());
+        }*/
+
+        /*
+        public async Task<IActionResult> DeletedIndex()
+        {
+            var applicationDbContext = _context.Comments.Where(c=>c.Deleted != null).Include(c => c.BlogUser).Include(c => c.Moderator).Include(c => c.Post);
+            return View(await applicationDbContext.ToListAsync());
+        }*/
+
+        // GET: Comments
+        public async Task<IActionResult> Index()
+        {
+            var ogComments = _context.Comments.Include(c => c.BlogUser).Include(c => c.Moderator).Include(c => c.Post);
+            return View(await ogComments.ToListAsync());
         }
 
         // GET: Comments/Details/5
@@ -48,13 +69,13 @@ namespace AmbroBlogProject.Controllers
         }
 
         // GET: Comments/Create
-        public IActionResult Create()
+        /*public IActionResult Create()
         {
             ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id");
             ViewData["ModeratorId"] = new SelectList(_context.Users, "Id", "Id");
             ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Abstract");
             return View();
-        }
+        }*/
 
         // POST: Comments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
@@ -69,9 +90,7 @@ namespace AmbroBlogProject.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id", comment.BlogUserId);
-            ViewData["ModeratorId"] = new SelectList(_context.Users, "Id", "Id", comment.ModeratorId);
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Abstract", comment.PostId);
+
             return View(comment);
         }
 
