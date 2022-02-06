@@ -1,4 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿/*
+ * Blog Project
+ * An ASP.NET MVC Blog
+ * Based on Coder Foundry Blog series
+ * 
+ * Mark Ambrocio 2022
+ * https://github.com/markanator/csharp_AmbroBlogProject
+ */
+using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;

@@ -1,4 +1,12 @@
-﻿using MailKit.Net.Smtp;
+﻿/*
+ * Blog Project
+ * An ASP.NET MVC Blog
+ * Based on Coder Foundry Blog series
+ * 
+ * Mark Ambrocio 2022
+ * https://github.com/markanator/csharp_AmbroBlogProject
+ */
+using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;

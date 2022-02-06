@@ -1,4 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿/*
+ * Blog Project
+ * An ASP.NET MVC Blog
+ * Based on Coder Foundry Blog series
+ * 
+ * Mark Ambrocio 2022
+ * https://github.com/markanator/csharp_AmbroBlogProject
+ */
+using Microsoft.AspNetCore.Http;
 using System;
 using System.IO;
 using System.Threading.Tasks;

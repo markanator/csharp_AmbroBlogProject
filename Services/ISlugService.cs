@@ -6,11 +6,11 @@
  * Mark Ambrocio 2022
  * https://github.com/markanator/csharp_AmbroBlogProject
  */
-namespace AmbroBlogProject.Enums
+namespace AmbroBlogProject.Services
 {
-    public enum BlogRole
+    public interface ISlugService
     {
-        Administrator,
-        Moderator
+        string UrlFriendly(string title);
+        bool IsUnique(string slug);
     }
 }
