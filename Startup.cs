@@ -54,6 +54,9 @@ namespace AmbroBlogProject
 
             // register image service
             services.AddScoped<IImageService, BasicImageService>();
+
+            // register slug service
+            services.AddScoped<ISlugService, BasicSlugService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
