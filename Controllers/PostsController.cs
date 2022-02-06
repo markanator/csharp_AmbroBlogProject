@@ -19,6 +19,7 @@ using AmbroBlogProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using X.PagedList;
 
 namespace AmbroBlogProject.Controllers
 {
@@ -44,16 +45,21 @@ namespace AmbroBlogProject.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Posts/Details/5
-        /*public async Task<IActionResult> Details(int? id)
+        // GET: Posts/BlogPostIndex/{id}
+        public async Task<IActionResult> BlogPostIndex(int? id, int? page)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            
-        }*/
+            var pageNum = page ?? 1;
+            var pageSize = 5;
+
+            var posts = await _context.Posts
+                .Where(p => p.BlogId == id && p.ReadyStatus == Enums.ReadyStatus.ProductionReady)
+                .OrderBy(p => p.Created)
+                .ToPagedListAsync(pageNum, pageSize);
+
+            return View(posts);
+        }
 
         // GET: Posts/Details/[Slug]
         public async Task<IActionResult> Details(string slug)
