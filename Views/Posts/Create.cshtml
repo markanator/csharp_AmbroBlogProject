@@ -92,6 +92,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
+        let tagValues = "@ViewData["TagValues"]"
         $('#Content').summernote({
             placeholder: "Post Content",
             tabsize: 2,
