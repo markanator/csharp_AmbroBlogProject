@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using AmbroBlogProject.Services;
 
 namespace AmbroBlogProject.Areas.Identity.Pages.Account
 {
@@ -22,14 +23,14 @@ namespace AmbroBlogProject.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<BlogUser> _signInManager;
         private readonly UserManager<BlogUser> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly IBlogEmailSender _emailSender;
         private readonly ILogger<ExternalLoginModel> _logger;
 
         public ExternalLoginModel(
             SignInManager<BlogUser> signInManager,
             UserManager<BlogUser> userManager,
             ILogger<ExternalLoginModel> logger,
-            IEmailSender emailSender)
+            IBlogEmailSender emailSender)
         {
             _signInManager = signInManager;
             _userManager = userManager;
