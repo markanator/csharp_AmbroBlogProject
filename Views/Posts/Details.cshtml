@@ -15,6 +15,28 @@
     </div>
   </article>
 
+  <hr/>
+  
+    <article class="container mx-auto">
+        <div class="row">
+            <div class='col text-center font-weight-bold h3'>
+                <h3>Tags</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col text-center">
+                @foreach (var item in Model.Tags)
+               {
+                   <a class="btn btn-warning btn-sm btn-dark" asp-action="TagIndex" asp-routoe-tag="@item.Text.ToLower()">#@item.Text</a>
+               }
+            </div>
+        </div>
+    </article>
+  
+  <hr/>
+
+
+
   @*
       1. display comments related to this post
       2. Display authors image

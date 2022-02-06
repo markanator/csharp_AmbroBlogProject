@@ -55,6 +55,7 @@ namespace AmbroBlogProject.Controllers
             var post = await _context.Posts
                 .Include(p => p.Blog)
                 .Include(p => p.BlogUser)
+                .Include(p => p.Tags)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (post == null)
             {
@@ -128,12 +129,13 @@ namespace AmbroBlogProject.Controllers
                 return NotFound();
             }
 
-            var post = await _context.Posts.FindAsync(id);
+            var post = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == id);
             if (post == null)
             {
                 return NotFound();
             }
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name", post.BlogId);
+            ViewData["TagValues"] = string.Join(",", post.Tags.Select(t => t.Text));
 
             return View(post);
         }
@@ -143,7 +145,7 @@ namespace AmbroBlogProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile newImage)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile newImage, List<string> tagValues)
         {
             if (id != post.Id)
             {
@@ -154,8 +156,9 @@ namespace AmbroBlogProject.Controllers
             {
                 try
                 {
-                    var editedPost = await _context.Posts.FindAsync(post.Id);
+                    var editedPost = await _context.Posts.Include(p => p.Tags).FirstOrDefaultAsync(p => p.Id == post.Id);
 
+                    // general updated fields
                     editedPost.Updated = DateTime.Now;
                     editedPost.Title = post.Title;
                     editedPost.Abstract = post.Abstract;
@@ -163,10 +166,24 @@ namespace AmbroBlogProject.Controllers
                     editedPost.ReadyStatus = post.ReadyStatus;
                     editedPost.BlogId = post.BlogId;
 
+                    // Post Image
                     if (newImage != null)
                     {
                         editedPost.ImageDate = await _imageService.EncodeImageAsync(newImage);
                         editedPost.ContentType = _imageService.ContentType(newImage);
+                    }
+
+                    // Post Tags
+                    _context.Tags.RemoveRange(editedPost.Tags);
+
+                    foreach (var tag in tagValues)
+                    {
+                        _context.Add(new Tag()
+                        {
+                            PostId = post.Id,
+                            BlogUserId = editedPost.BlogUserId,
+                            Text = tag
+                        });
                     }
 
 
