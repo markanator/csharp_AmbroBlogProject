@@ -9,8 +9,8 @@
 
 <h4>Post</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="container mx-auto row">
+    <div class="col mb-4">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
@@ -41,7 +41,7 @@
 
             <div class="form-group">
                 <label asp-for="Image" class="control-label"></label>
-                <input type="file" asp-for="Image" class="form-control" />
+                <input type="file" asp-for="Image" class="form-control" accept=".jpg,.jpeg,.png,.gif" />
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
 
@@ -49,13 +49,26 @@
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
+    
+    
+    <div class="d-flex justify-content-end">
+        <a asp-action="Index">Back to List</a>
+    </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        $('#Content').summernote({
+            placeholder: "Post Content",
+            tabsize: 2,
+            height: 300,                 // set editor height
+            minHeight: null,             // set minimum height of editor
+            maxHeight: null,             // set maximum height of editor
+            focus: false                  // set focus to editable area after initializing summernote
+        });
+    </script>
 }
