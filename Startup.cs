@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using AmbroBlogProject.Data;
 using AmbroBlogProject.Models;
 using AmbroBlogProject.Services;
+using AmbroBlogProject.ViewModels;
 
 namespace AmbroBlogProject
 {
@@ -38,6 +39,10 @@ namespace AmbroBlogProject
 
             // register custom DataService
             services.AddScoped<DataService>();
+
+            // register a preconfigured Mail Settings class
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.AddScoped<IBlogEmailSender, EmailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
