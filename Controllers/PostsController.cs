@@ -54,6 +54,7 @@ namespace AmbroBlogProject.Controllers
         }
 
         // GET: Posts
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Index()
         {
             var applicationDbContext = _context.Posts;
@@ -93,7 +94,7 @@ namespace AmbroBlogProject.Controllers
         }
 
         // GET: Posts/Create
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public IActionResult Create()
         {
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name");
@@ -158,7 +159,7 @@ namespace AmbroBlogProject.Controllers
         }
 
         // GET: Posts/Edit/5
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -254,7 +255,7 @@ namespace AmbroBlogProject.Controllers
         }
 
         // GET: Posts/Delete/5
-        [Authorize]
+        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
