@@ -17,13 +17,13 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Title)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Abstract)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Image)
             </th>
             <th></th>
         </tr>
@@ -33,17 +33,17 @@
         <tr>
             
             <td>
+                <img src="@imageService.DecodeImage(item.ImageDate, item.ContentType)" class="img-fluid" alt="@item.Title" width="150" height="150" style="object-fit:cover" />
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Abstract)
             </td>
             <td>
-                <img src="@imageService.DecodeImage(item.ImageDate, item.ContentType)" class="img-fluid" alt="@item.Title" width="150" height="150" style="object-fit:cover" />
-            </td>
-            <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Details" asp-route-slug="@item.Slug">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
