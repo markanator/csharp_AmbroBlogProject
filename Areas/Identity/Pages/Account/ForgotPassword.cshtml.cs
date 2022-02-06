@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
+using AmbroBlogProject.Services;
 
 namespace AmbroBlogProject.Areas.Identity.Pages.Account
 {
@@ -18,9 +19,9 @@ namespace AmbroBlogProject.Areas.Identity.Pages.Account
     public class ForgotPasswordModel : PageModel
     {
         private readonly UserManager<BlogUser> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly IBlogEmailSender _emailSender;
 
-        public ForgotPasswordModel(UserManager<BlogUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<BlogUser> userManager, IBlogEmailSender emailSender)
         {
             _userManager = userManager;
             _emailSender = emailSender;
@@ -59,7 +60,7 @@ namespace AmbroBlogProject.Areas.Identity.Pages.Account
 
                 await _emailSender.SendEmailAsync(
                     Input.Email,
-                    "Reset Password",
+                    "Reset Your Password",
                     $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
                 return RedirectToPage("./ForgotPasswordConfirmation");
