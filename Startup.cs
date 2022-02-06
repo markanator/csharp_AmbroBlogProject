@@ -47,6 +47,7 @@ namespace AmbroBlogProject
 
             // register custom DataService
             services.AddScoped<DataService>();
+            services.AddScoped<BlogSearchService>();
 
             // register a preconfigured Mail Settings class
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
