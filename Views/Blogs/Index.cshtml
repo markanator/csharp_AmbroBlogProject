@@ -38,7 +38,7 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                <img src="@imageService.DecodeImage(item.ImageData, item.ContentType)" alt="@item.Name" width="150" height="150" style="object-fit:cover" />
+                <img src="@imageService.DecodeImage(item.ImageData, item.ContentType)" class="img-fluid" alt="@item.Name" width="150" height="150" style="object-fit:cover" />
                 
                 @*@Html.DisplayFor(modelItem => item.ImageData)*@
             </td>

@@ -17,6 +17,7 @@ using AmbroBlogProject.Data;
 using AmbroBlogProject.Models;
 using AmbroBlogProject.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 
 namespace AmbroBlogProject.Controllers
 {
@@ -24,11 +25,13 @@ namespace AmbroBlogProject.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ISlugService _slugService;
+        private readonly IImageService _imageService;
 
-        public PostsController(ApplicationDbContext context, ISlugService slugService)
+        public PostsController(ApplicationDbContext context, ISlugService slugService, IImageService imageService)
         {
             _context = context;
             _slugService = slugService;
+            _imageService = imageService;
         }
 
         // GET: Posts
@@ -88,6 +91,8 @@ namespace AmbroBlogProject.Controllers
 
                 post.Slug = slug;
                 post.Created = DateTime.Now;
+                post.ImageDate = await _imageService.EncodeImageAsync(post.Image);
+                post.ContentType = _imageService.ContentType(post.Image);
 
                 _context.Add(post);
                 await _context.SaveChangesAsync();
@@ -121,7 +126,7 @@ namespace AmbroBlogProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus,Image")] Post post)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile newImage)
         {
             if (id != post.Id)
             {
@@ -132,11 +137,22 @@ namespace AmbroBlogProject.Controllers
             {
                 try
                 {
-                    // slug
-                    // etc...
-                    post.Updated = DateTime.Now;
+                    var editedPost = await _context.Posts.FindAsync(post.Id);
 
-                    _context.Update(post);
+                    editedPost.Updated = DateTime.Now;
+                    editedPost.Title = post.Title;
+                    editedPost.Abstract = post.Abstract;
+                    editedPost.Content = post.Content;
+                    editedPost.ReadyStatus = post.ReadyStatus;
+                    editedPost.BlogId = post.BlogId;
+
+                    if (newImage != null)
+                    {
+                        editedPost.ImageDate = await _imageService.EncodeImageAsync(newImage);
+                        editedPost.ContentType = _imageService.ContentType(newImage);
+                    }
+
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

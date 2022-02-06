@@ -1,4 +1,8 @@
-﻿@model IEnumerable<AmbroBlogProject.Models.Post>
+﻿@using AmbroBlogProject.Services
+@using AmbroBlogProject.Models
+
+@inject IImageService imageService
+@model IEnumerable<Post>
 
 @{
     ViewData["Title"] = "Index";
@@ -19,10 +23,7 @@
                 @Html.DisplayNameFor(model => model.Abstract)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Created)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ReadyStatus)
+                @Html.DisplayNameFor(model => model.Image)
             </th>
             <th></th>
         </tr>
@@ -30,6 +31,7 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
+            
             <td>
                 @Html.DisplayFor(modelItem => item.Title)
             </td>
@@ -37,10 +39,7 @@
                 @Html.DisplayFor(modelItem => item.Abstract)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReadyStatus)
+                <img src="@imageService.DecodeImage(item.ImageDate, item.ContentType)" class="img-fluid" alt="@item.Title" width="150" height="150" style="object-fit:cover" />
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
