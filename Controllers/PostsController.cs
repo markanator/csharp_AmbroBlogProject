@@ -92,12 +92,12 @@ namespace AmbroBlogProject.Controllers
                     validationError = true;
                     ModelState.AddModelError("", "The title provided cannnot be used as it results in an empty slug.");
                 }
-                if (!_slugService.IsUnique(slug))
+                else if (!_slugService.IsUnique(slug))
                 {
                     validationError = true;
                     ModelState.AddModelError("Title", "The title you provided cannot be used. Duplicate.");
                 }
-                if (validationError)
+                else if (validationError)
                 {
                     ViewData["TagValues"] = string.Join(",", tagValues);
                     return View(post);
@@ -216,14 +216,8 @@ namespace AmbroBlogProject.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PostExists(post.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!PostExists(post.Id)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
