@@ -84,17 +84,27 @@ namespace AmbroBlogProject.Controllers
             if (ModelState.IsValid)
             {
                 // create slug and check for unique
-                var slug = _slugService.UrlFriendly(post.Title);
+                string slug = _slugService.UrlFriendly(post.Title);
+                bool validationError = false;
+
+                if (string.IsNullOrEmpty(slug))
+                {
+                    validationError = true;
+                    ModelState.AddModelError("", "The title provided cannnot be used as it results in an empty slug.");
+                }
                 if (!_slugService.IsUnique(slug))
                 {
+                    validationError = true;
                     ModelState.AddModelError("Title", "The title you provided cannot be used. Duplicate.");
+                }
+                if (validationError)
+                {
                     ViewData["TagValues"] = string.Join(",", tagValues);
-
                     return View(post);
                 }
 
-                var authorId = _userManager.GetUserId(User);
-                post.BlogUserId = authorId;
+                var blogUserId = _userManager.GetUserId(User);
+                post.BlogUserId = blogUserId;
                 post.Slug = slug;
                 post.Created = DateTime.Now;
                 post.ImageDate = await _imageService.EncodeImageAsync(post.Image);
@@ -108,7 +118,7 @@ namespace AmbroBlogProject.Controllers
                     _context.Add(new Tag()
                     {
                         PostId = post.Id,
-                        BlogUserId = authorId,
+                        BlogUserId = blogUserId,
                         Text = tag
                     });
                 }
@@ -160,11 +170,26 @@ namespace AmbroBlogProject.Controllers
 
                     // general updated fields
                     editedPost.Updated = DateTime.Now;
-                    editedPost.Title = post.Title;
                     editedPost.Abstract = post.Abstract;
                     editedPost.Content = post.Content;
                     editedPost.ReadyStatus = post.ReadyStatus;
                     editedPost.BlogId = post.BlogId;
+
+                    var newSlug = _slugService.UrlFriendly(post.Title);
+                    if (newSlug != editedPost.Slug)
+                    {
+                        if (_slugService.IsUnique(newSlug))
+                        {
+                            editedPost.Title = post.Title;
+                            editedPost.Slug = newSlug;
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("Title", "This title cannot be used as it results in a duplicate slug.");
+                            ViewData["TagValues"] = string.Join(",", post.Tags.Select(t => t.Text));
+                            return View(post);
+                        }
+                    }
 
                     // Post Image
                     if (newImage != null)
