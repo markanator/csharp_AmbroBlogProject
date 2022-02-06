@@ -35,7 +35,7 @@
           </div>
           <div class="control-group">
             <div class="form-group col-xs-12 floating-label-form-group controls">
-              <label asp-for="Subject">Phone Number</label>
+              <label asp-for="Subject">Subject</label>
               <input asp-for="Subject" type="text" class="form-control" placeholder="Subject" id="subject" required data-validation-required-message="Please enter your phone number.">
               <p class="help-block text-danger"></p>
             </div>
@@ -43,7 +43,7 @@
           <div class="control-group">
             <div class="form-group floating-label-form-group controls">
               <label asp-for="Message">Message</label>
-              <textarea asp-for="Message" rows="5" class="form-control" placeholder="Message" id="message" required data-validation-required-message="Please enter a message."></textarea>
+              <textarea asp-for="Message" rows="5" class="form-control" id="Message" required data-validation-required-message="Please enter a message."></textarea>
               <p class="help-block text-danger"></p>
             </div>
           </div>
@@ -56,7 +56,7 @@
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 
     <script>
         $('#Message').summernote({
