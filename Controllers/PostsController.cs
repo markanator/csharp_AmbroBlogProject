@@ -18,6 +18,7 @@ using AmbroBlogProject.Models;
 using AmbroBlogProject.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace AmbroBlogProject.Controllers
 {
@@ -26,12 +27,14 @@ namespace AmbroBlogProject.Controllers
         private readonly ApplicationDbContext _context;
         private readonly ISlugService _slugService;
         private readonly IImageService _imageService;
+        private readonly UserManager<BlogUser> _userManager;
 
-        public PostsController(ApplicationDbContext context, ISlugService slugService, IImageService imageService)
+        public PostsController(ApplicationDbContext context, ISlugService slugService, IImageService imageService, UserManager<BlogUser> userManager)
         {
             _context = context;
             _slugService = slugService;
             _imageService = imageService;
+            _userManager = userManager;
         }
 
         // GET: Posts
@@ -89,6 +92,8 @@ namespace AmbroBlogProject.Controllers
                     return View(post);
                 }
 
+                var authorId = _userManager.GetUserId(User);
+                post.BlogUserId = authorId;
                 post.Slug = slug;
                 post.Created = DateTime.Now;
                 post.ImageDate = await _imageService.EncodeImageAsync(post.Image);
@@ -96,6 +101,17 @@ namespace AmbroBlogProject.Controllers
 
                 _context.Add(post);
                 await _context.SaveChangesAsync();
+
+                foreach (var tag in tagValues)
+                {
+                    _context.Add(new Tag()
+                    {
+                        PostId = post.Id,
+                        BlogUserId = authorId,
+                        Text = tag
+                    });
+                }
+                await _context.SaveChangesAsync(); // store new listing of tags, with Post Id
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Description", post.BlogId);

@@ -33,16 +33,46 @@
                 <textarea asp-for="Content" class="form-control" ></textarea>
                 <span asp-validation-for="Content" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="ReadyStatus" class="control-label"></label>
-                <select asp-for="ReadyStatus" asp-items="@Html.GetEnumSelectList<ReadyStatus>()" class="form-control"></select>
-                <span asp-validation-for="ReadyStatus" class="text-danger"></span>
-            </div>
 
             <div class="form-group">
                 <label asp-for="Image" class="control-label"></label>
                 <input type="file" asp-for="Image" class="form-control" accept=".jpg,.jpeg,.png,.gif" />
                 <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <div class="row">
+                    <div class="col">
+                        <label class="form-label">Manage Tags</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="row mb-2">
+                            <div class="col">
+                                <input type="text" class="form-control" id="TagEntry"/>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <button onclick="AddTag()" type="button" name="Add" class="w-100 btn btn-dark btn-sm">Add</button>
+                            </div>
+                            <div class="col">
+                                <button onclick="DeleteTag()" type="button" name="Delete" class="w-100 btn btn-dark btn-sm">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <select class="w-100" name="tagValues" id="tagValues" multiple></select>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="form-group">
+                <label asp-for="ReadyStatus" class="control-label"></label>
+                <select asp-for="ReadyStatus" asp-items="@Html.GetEnumSelectList<ReadyStatus>()" class="form-control"></select>
+                <span asp-validation-for="ReadyStatus" class="text-danger"></span>
             </div>
 
             <div class="form-group">
