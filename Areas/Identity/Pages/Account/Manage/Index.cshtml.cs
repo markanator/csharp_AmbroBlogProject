@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using AmbroBlogProject.Models;
+using AmbroBlogProject.Services;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -14,16 +16,20 @@ namespace AmbroBlogProject.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<BlogUser> _userManager;
         private readonly SignInManager<BlogUser> _signInManager;
+        private readonly IImageService _imageService;
 
         public IndexModel(
             UserManager<BlogUser> userManager,
-            SignInManager<BlogUser> signInManager)
+            SignInManager<BlogUser> signInManager,
+            IImageService imageService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _imageService = imageService;
         }
 
         public string Username { get; set; }
+        public string CurrentImage { get; set; }
 
         [TempData]
         public string StatusMessage { get; set; }
@@ -36,6 +42,9 @@ namespace AmbroBlogProject.Areas.Identity.Pages.Account.Manage
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Profile Image")]
+            public IFormFile Image { get; set; }
         }
 
         private async Task LoadAsync(BlogUser user)
@@ -44,6 +53,7 @@ namespace AmbroBlogProject.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
+            CurrentImage = _imageService.DecodeImage(user.ImageData, user.ContentType);
 
             Input = new InputModel
             {
@@ -87,6 +97,15 @@ namespace AmbroBlogProject.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
+
+            // for new images
+            if (Input.Image != null)
+            {
+                user.ImageData = await _imageService.EncodeImageAsync(Input.Image);
+                user.ContentType = _imageService.ContentType(Input.Image);
+                await _userManager.UpdateAsync(user);
+            }
+
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
