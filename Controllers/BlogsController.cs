@@ -93,6 +93,7 @@ namespace AmbroBlogProject.Controllers
         }
 
         // GET: Blogs/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -161,6 +162,7 @@ namespace AmbroBlogProject.Controllers
         }
 
         // GET: Blogs/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
