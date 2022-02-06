@@ -33,6 +33,7 @@ namespace AmbroBlogProject.Services
 
         public async Task ManageDataAsync()
         {
+            // create DB if not present
             await _dbContext.Database.MigrateAsync();
         // 1. seed a few roles into the system
             await SeedRolesAsync();

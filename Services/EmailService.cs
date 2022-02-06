@@ -29,11 +29,11 @@ namespace AmbroBlogProject.Services
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(emailFrom);
             email.To.Add(MailboxAddress.Parse(_mailSettings.Mail));
-            email.Subject = subject;
+            email.Subject = "Contact Form: " + subject;
 
             var builder = new BodyBuilder()
             {
-                HtmlBody = $"<b>{name}</b> has sent you an email and can be reached at: <b>{emailFrom}</b><br /><br />{htmlMessage}"
+                HtmlBody = $"<b>{name}</b> has sent you an email and can be reached at: <b>{emailFrom}</b><br /><br /><hr/>{htmlMessage}"
             };
 
             email.Body = builder.ToMessageBody();
