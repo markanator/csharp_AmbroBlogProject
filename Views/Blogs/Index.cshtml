@@ -1,4 +1,8 @@
-﻿@model IEnumerable<AmbroBlogProject.Models.Blog>
+﻿@using AmbroBlogProject.Services
+
+@inject IImageService imageService
+@model IEnumerable<AmbroBlogProject.Models.Blog>
+
 
 @{
     ViewData["Title"] = "Index";
@@ -19,19 +23,7 @@
                 @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Created)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Updated)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.ImageData)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ContentType)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.BlogUser)
             </th>
             <th></th>
         </tr>
@@ -46,19 +38,9 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Created)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Updated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageData)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ContentType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.BlogUser.FullName)
+                <img src="@imageService.DecodeImage(item.ImageData, item.ContentType)" alt="@item.Name" width="150" height="150" style="object-fit:cover" />
+                
+                @*@Html.DisplayFor(modelItem => item.ImageData)*@
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
