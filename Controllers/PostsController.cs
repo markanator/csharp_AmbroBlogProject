@@ -74,25 +74,43 @@ namespace AmbroBlogProject.Controllers
                 .OrderBy(p => p.Created)
                 .ToPagedListAsync(pageNum, pageSize);
 
+            var blog = await _context.Blogs
+                .FindAsync(id);
+
+            ViewData["MainText"] = blog.Name;
+            ViewData["SubText"] = blog.Description;
+
             return View(posts);
         }
 
         // GET: Posts/Details/[Slug]
         public async Task<IActionResult> Details(string slug)
         {
+            ViewData["Title"] = "Post Details Page";
             if (string.IsNullOrEmpty(slug)) return NotFound();
 
             var post = await _context.Posts
-                .Include(p => p.Blog)
                 .Include(p => p.BlogUser)
                 .Include(p => p.Tags)
                 .Include(p => p.Comments)
                 .ThenInclude(c => c.BlogUser)// connected to Comments
+                .Include(p => p.Comments)
+                .ThenInclude(c => c.Moderator)
                 .FirstOrDefaultAsync(m => m.Slug == slug);
 
             if (post == null) return NotFound();
 
-            return View(post);
+            var dataVM = new ViewModels.PostDetailViewModel()
+            {
+                Post = post,
+                Tags = _context.Tags.Select(t => t.Text.ToLower()).Distinct().ToList(),
+            };
+
+            ViewData["HeaderImage"] = _imageService.DecodeImage(post.ImageDate, post.ContentType);
+            ViewData["MainText"] = post.Title;
+            ViewData["SubText"] = post.Abstract;
+
+            return View(dataVM);
         }
 
         // GET: Posts/Create
@@ -101,6 +119,8 @@ namespace AmbroBlogProject.Controllers
         {
             ViewData["BlogId"] = new SelectList(_context.Blogs, "Id", "Name");
             ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "FullName");
+            ViewData["MainText"] = "Create Blog";
+            ViewData["SubText"] = "Create a new Blog";
             return View();
         }
 

@@ -1,54 +1,55 @@
-﻿@using Microsoft.AspNetCore.Identity
-@using AmbroBlogProject.Models
+﻿@using AmbroBlogProject.Models
 @using AmbroBlogProject.Enums
 @using AmbroBlogProject.Services
+@using AmbroBlogProject.ViewModels
+@using Microsoft.AspNetCore.Identity
 
+@inject IImageService imageService
 @inject UserManager<BlogUser> userManager
 @inject IImageService imageService
 
-@model Post
+@model PostDetailViewModel
 
 @{
-    ViewData["Title"] = Model.Title;
+    ViewData["Title"] = Model.Post.Title;
 }
 
 <!-- Post Content -->
-  <article>
-    <div class="container">
-      <div class="row">
-        <div class="col-lg-8 col-md-10 mx-auto">
-            @Html.Raw(Model.Content)
+ <article>
+    <div class="row m-0">
+        @if (User.IsInRole("Administrator")) 
+        {
+            <div class="col-12 border">
+                Admin Menu: @Html.ActionLink("Edit", "Edit", "Posts", new { Id = Model.Post.Id })
+            </div>
+        }
+        <div class="col-9 border-right px-4">
+            @Html.Raw(Model.Post.Content)
         </div>
-      </div>
+        <div class="col-3 text-center font-weight-bold h6">
+            <div class="card border-0">
+                <div class="card-body">
+                    <h4 class="card-title">Post Tags</h4>
+                    <div class="tagView">
+                        @foreach (var tag in Model.Post.Tags.ToList())
+                        {
+                            <a asp-action="TagIndex" asp-route-tag="@tag.Text.ToLower()" class="mb-1 btn btn-sm blog-primary btn-outline-dark">#@tag.Text</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </article>
+</article>
 
-  <hr/>
-  
-    <article class="container mx-auto">
-        <div class="row">
-            <div class='col text-center font-weight-bold h3'>
-                <h3>Tags</h3>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col text-center">
-                @foreach (var item in Model.Tags)
-               {
-                   <a class="btn btn-warning btn-sm btn-dark" asp-action="TagIndex" asp-routoe-tag="@item.Text.ToLower()">#@item.Text</a>
-               }
-            </div>
-        </div>
-    </article>
-  
   <hr/>
 
   <div class="container mx-auto">
       @if (User.Identity.IsAuthenticated)
     {
         <form asp-controller="Comments" asp-action="Create" method="post">
-            @Html.Hidden("PostId", Model.Id)
-            @Html.Hidden("Slug", Model.Slug)
+            @Html.Hidden("PostId", Model.Post.Id)
+            @Html.Hidden("Slug", Model.Post.Slug)
 
             <div class="form-group">
                 <label class="h2 control-label font-weight-bold">Add Comment</label>
@@ -60,20 +61,18 @@
     }
     else
     {
-        <a class="btn w-100 btn-sm btn-dark" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~/Posts/Details?slug=@Model.Slug">
+        <a class="btn w-100 btn-sm btn-dark" asp-area="Identity" asp-page="/Account/Login" asp-route-ReturnUrl="~/Posts/Details?slug=@Model.Post.Slug">
             Login to add comments
         </a>
     }
 
     <br />
-    <hr />
-    <br />
 
-    <a id="commentSection" class="btn btn-sm btn-dark w-100 mb-2">@Model.Comments.Count COMMENT(S)</a>
-    @foreach (var comment in Model.Comments.OrderByDescending(c => c.Created))
+    <p id="commentSection" class="p-3 text-light font-weight-bold text-center rounded bg-dark w-100 mb-2">@Model.Post.Comments.Count COMMENT(S)</p>
+    @foreach (var comment in Model.Post.Comments.OrderByDescending(c => c.Created))
     {
         <div class="media media-border p-4 mb-2 bg-light">
-            <img class="mr-3 mt-3 rounded-circle" 
+            <img class="mr-3 rounded-circle" 
                  width="60" 
                  height="60" 
                  src="@imageService.DecodeImage(comment.BlogUser.ImageData, comment.BlogUser.ContentType)"

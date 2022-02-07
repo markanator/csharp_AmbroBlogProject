@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.Extensions.Configuration;
+@inject IConfiguration _configuration
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -76,18 +79,18 @@
     </nav>
 
     <!-- Page Header -->
-    <header class="masthead" style="background-image: url('/images/home-bg.jpg')">
+    <header class="masthead" style="background-image: url(@(@ViewData["HeaderImage"] == null ? $"/img/{_configuration["DefaultHeaderImage"]}" : ViewData["HeaderImage"]))">
         <div class="overlay"></div>
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-md-10 mx-auto">
                     <div class="site-heading">
-                        <h1>Clean Blog</h1>
-                        <span class="subheading">A Blog Theme by Start Bootstrap</span>
+                        <h1>@ViewData["MainText"]</h1>
+                        <span class="subheading">@ViewData["SubText"]</span>
 
                         <form asp-action="SearchIndex" asp-controller="Posts">
                             <div class="input-group mt-5">
-                                <input type="text" name="SearchTerm" class="form-control" placeholder="Search Term">
+                                <input type="text" name="SearchTerm" class="form-control h-auto" placeholder="Search Term">
                                 <div class="input-group-append">
                                     <button class="btn btn-warning btn-block btn-sm" type="submit">Search</button>
                                 </div>
@@ -110,7 +113,7 @@
                 <div class="col-md-10 col-lg-8 col-xl-7">
                     <ul class="list-inline text-center">
                         <li class="list-inline-item">
-                            <a href="#!">
+                            <a href="https://twitter.com/_mark_ambro" target="_blank">
                                 <span class="fa-stack fa-lg">
                                     <i class="fas fa-circle fa-stack-2x"></i>
                                     <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
@@ -118,15 +121,15 @@
                             </a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="#!">
+                            <a href="https://www.linkedin.com/in/mark-ambrocio/" target="_blank">
                                 <span class="fa-stack fa-lg">
                                     <i class="fas fa-circle fa-stack-2x"></i>
-                                    <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                                    <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
                                 </span>
                             </a>
                         </li>
                         <li class="list-inline-item">
-                            <a href="#!">
+                            <a href="https://github.com/markanator" target="_blank">
                                 <span class="fa-stack fa-lg">
                                     <i class="fas fa-circle fa-stack-2x"></i>
                                     <i class="fab fa-github fa-stack-1x fa-inverse"></i>

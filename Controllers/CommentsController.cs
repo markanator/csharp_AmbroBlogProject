@@ -38,27 +38,44 @@ namespace AmbroBlogProject.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        /*
-         * [Authorize(Roles = "Administrator, Moderator")]
+        [Authorize(Roles = "Administrator, Moderator")]
         public async Task<IActionResult> ModeratedIndex()
         {
-            var modComments = _context.Comments.Where(c=>c.Moderated != null).Include(c => c.BlogUser).Include(c => c.Moderator).Include(c => c.Post);
-            return View(await modComments.ToListAsync());
-        }*/
+            var moderatedComments = await _context.Comments
+                .Where(c => c.Moderated != null)
+                .Include(c => c.Post)
+                .Include(c => c.BlogUser)
+                .ToListAsync();
 
-        /*
-         * [Authorize(Roles = "Administrator, Moderator")]
+            ViewData["MainText"] = "Comments";
+            ViewData["SubText"] = "All Moderated Comments";
+
+            return View("Index", moderatedComments);
+        }
+
+        [Authorize(Roles = "Administrator, Moderator")]
         public async Task<IActionResult> DeletedIndex()
         {
-            var applicationDbContext = _context.Comments.Where(c=>c.Deleted != null).Include(c => c.BlogUser).Include(c => c.Moderator).Include(c => c.Post);
-            return View(await applicationDbContext.ToListAsync());
-        }*/
+            var deletedComments = await _context.Comments
+                .Where(c => c.Deleted != null)
+                .Include(c => c.Post)
+                .Include(c => c.BlogUser)
+                .ToListAsync();
+
+            ViewData["MainText"] = "Comments";
+            ViewData["SubText"] = "All Deleted Comments";
+
+            return View("Index", deletedComments);
+        }
 
         // GET: Comments
         [Authorize(Roles = "Administrator, Moderator")]
         public async Task<IActionResult> Index()
         {
             var ogComments = _context.Comments.Include(c => c.BlogUser).Include(c => c.Moderator).Include(c => c.Post);
+
+            ViewData["MainText"] = "Comments";
+            ViewData["SubText"] = "All Unmoderated Comments";
             return View(await ogComments.ToListAsync());
         }
 

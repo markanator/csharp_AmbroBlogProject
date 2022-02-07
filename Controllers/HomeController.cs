@@ -47,16 +47,26 @@ namespace AmbroBlogProject.Controllers
                             .OrderByDescending(b => b.Created)
                             .ToPagedListAsync(pageNum, pageSize);
 
+            ViewData["MainText"] = "Blog";
+            ViewData["SubText"] = "A Blog by Kyle Givler";
+
+            ViewData["HeaderImage"] = "/images/home-bg.jpg";
+
             return View(await blogs);
         }
 
         public IActionResult About()
         {
+            ViewData["MainText"] = "Blog";
+            ViewData["SubText"] = "About";
+            ViewData["HeaderImage"] = "/images/about-bg.jpg";
             return View();
         }
 
         public IActionResult Contact()
         {
+            ViewData["MainText"] = "Blog";
+            ViewData["SubText"] = "Contact";
             return View();
         }
 

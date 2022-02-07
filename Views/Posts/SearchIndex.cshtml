@@ -8,7 +8,7 @@
 @inject IImageService imageService
 @model IPagedList<Post>
 
-<div class="row">
+<div class="row mx-0">
     @foreach(var post in Model)
      {
         <div class=" col-sm-2 col-lg-4 mt-3">
@@ -35,19 +35,21 @@
 
 <hr />
 
-<div class="row">
-    <div class="col">
-        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+<div class="container mx-auto text-center">
+    <div class="row">
+        <div class="col">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col">
-        @Html.PagedListPager(Model, page => Url.Action("SearchIndex", new { page = page, searchTerm = ViewData["searchTerm"]}),
-            new PagedListRenderOptions
-            {
-                LiElementClasses = new string[] { "page-item" },
-                PageClasses = new string[] { "page-link" }
-            })
+    <div class="row">
+        <div class="col">
+            @Html.PagedListPager(Model, page => Url.Action("SearchIndex", new { page = page, searchTerm = ViewData["searchTerm"]}),
+                new PagedListRenderOptions
+                {
+                    LiElementClasses = new string[] { "page-item" },
+                    PageClasses = new string[] { "page-link" }
+                })
+        </div>
     </div>
 </div>

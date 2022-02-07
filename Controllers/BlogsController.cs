@@ -59,6 +59,9 @@ namespace AmbroBlogProject.Controllers
                 return NotFound();
             }
 
+            ViewData["MainText"] = blog.Name;
+            ViewData["SubText"] = blog.Description;
+
             return View(blog);
         }
 
@@ -66,7 +69,8 @@ namespace AmbroBlogProject.Controllers
         [Authorize(Roles ="Administrator")]
         public IActionResult Create()
         {
-            /*ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id");*/
+            ViewData["MainText"] = "Blog";
+            ViewData["SubText"] = "Create";
             return View();
         }
 
@@ -107,6 +111,9 @@ namespace AmbroBlogProject.Controllers
             {
                 return NotFound();
             }
+
+            ViewData["MainText"] = blog.Name;
+            ViewData["SubText"] = "Edit";
             return View(blog);
         }
 
@@ -179,6 +186,8 @@ namespace AmbroBlogProject.Controllers
                 return NotFound();
             }
 
+            ViewData["MainText"] = blog.Name;
+            ViewData["SubText"] = "Delete";
             return View(blog);
         }
 
