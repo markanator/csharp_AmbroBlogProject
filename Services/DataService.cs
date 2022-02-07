@@ -62,11 +62,11 @@ namespace AmbroBlogProject.Services
             // s1: create new instance of user
             var adminUser = new BlogUser()
             {
-                Email = "markanator13@hotmail.com",
-                UserName = "markanator13@hotmail.com",
-                FirstName = "Mark",
-                LastName = "Ambro",
-                DisplayName = "Mambroc",
+                Email = "AdminUser@example.com",
+                UserName = "AdminUser@example.com",
+                FirstName = "Admin",
+                LastName = "User",
+                DisplayName = "Admin User",
                 PhoneNumber = "800 555 1212",
                 EmailConfirmed = true,
             };
@@ -75,11 +75,11 @@ namespace AmbroBlogProject.Services
 
             var modUser = new BlogUser()
             {
-                Email = "cory.kris73@ethereal.email",
-                UserName = "cory.kris73@ethereal.email",
-                FirstName = "cory",
-                LastName = "kris73",
-                DisplayName = "cory.kris73",
+                Email = "ModUser@example.com",
+                UserName = "ModUser@example.com",
+                FirstName = "Moderator",
+                LastName = "User",
+                DisplayName = "Mod User",
                 PhoneNumber = "800 456 3214",
                 EmailConfirmed = true,
             };

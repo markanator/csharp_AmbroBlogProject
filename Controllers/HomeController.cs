@@ -48,7 +48,7 @@ namespace AmbroBlogProject.Controllers
                             .ToPagedListAsync(pageNum, pageSize);
 
             ViewData["MainText"] = "Blog";
-            ViewData["SubText"] = "A Blog by Kyle Givler";
+            ViewData["SubText"] = "A Blog by Mark Ambrocio";
 
             ViewData["HeaderImage"] = "/images/home-bg.jpg";
 
