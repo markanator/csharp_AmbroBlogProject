@@ -15,16 +15,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AmbroBlogProject.Data;
 using AmbroBlogProject.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace AmbroBlogProject.Controllers
 {
     public class CommentsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<BlogUser> _userManager;
 
-        public CommentsController(ApplicationDbContext context)
+        public CommentsController(ApplicationDbContext context, UserManager<BlogUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
 
@@ -35,6 +39,7 @@ namespace AmbroBlogProject.Controllers
         }
 
         /*
+         * [Authorize(Roles = "Administrator, Moderator")]
         public async Task<IActionResult> ModeratedIndex()
         {
             var modComments = _context.Comments.Where(c=>c.Moderated != null).Include(c => c.BlogUser).Include(c => c.Moderator).Include(c => c.Post);
@@ -42,6 +47,7 @@ namespace AmbroBlogProject.Controllers
         }*/
 
         /*
+         * [Authorize(Roles = "Administrator, Moderator")]
         public async Task<IActionResult> DeletedIndex()
         {
             var applicationDbContext = _context.Comments.Where(c=>c.Deleted != null).Include(c => c.BlogUser).Include(c => c.Moderator).Include(c => c.Post);
@@ -49,6 +55,7 @@ namespace AmbroBlogProject.Controllers
         }*/
 
         // GET: Comments
+        [Authorize(Roles = "Administrator, Moderator")]
         public async Task<IActionResult> Index()
         {
             var ogComments = _context.Comments.Include(c => c.BlogUser).Include(c => c.Moderator).Include(c => c.Post);
@@ -76,33 +83,39 @@ namespace AmbroBlogProject.Controllers
             return View(comment);
         }
 
-        // GET: Comments/Create
-        /*public IActionResult Create()
-        {
-            ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["ModeratorId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Abstract");
-            return View();
-        }*/
-
         // POST: Comments/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,PostId,BlogUserId,ModeratorId,Body,Created,Updated,Moderated,Deleted,ModeratedBody,ModerationType")] Comment comment)
+        public async Task<IActionResult> Create([Bind("PostId, Body")] Comment comment)
         {
             if (ModelState.IsValid)
             {
+                comment.BlogUserId = _userManager.GetUserId(User);
+                comment.Created = DateTime.Now;
+
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+                comment = await _context.Comments
+                    .Where(c => c.Id == comment.Id)
+                    .Include(c => c.Post)
+                    .FirstOrDefaultAsync();
+
+                if (comment == null)
+                {
+                    return NotFound();
+                }
+
+                return RedirectToAction("Details", "Posts", new { Slug = comment.Post.Slug }, "commentSection");
             }
 
             return View(comment);
         }
 
         // GET: Comments/Edit/5
+        [Authorize(Roles = "Administrator,Moderator")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -135,31 +148,63 @@ namespace AmbroBlogProject.Controllers
 
             if (ModelState.IsValid)
             {
+                var commentDb = await _context.Comments.Include(c => c.Post).FirstOrDefaultAsync(c => c.Id == comment.Id);
                 try
                 {
-                    _context.Update(comment);
+                    commentDb.Body = comment.Body;
+                    commentDb.Updated = DateTime.Now;
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CommentExists(comment.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!CommentExists(comment.Id)) return NotFound();
+                    else throw;
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Details", "Posts", new { slug = commentDb.Post.Slug }, "commentSection");
             }
-            ViewData["BlogUserId"] = new SelectList(_context.Users, "Id", "Id", comment.BlogUserId);
-            ViewData["ModeratorId"] = new SelectList(_context.Users, "Id", "Id", comment.ModeratorId);
-            ViewData["PostId"] = new SelectList(_context.Posts, "Id", "Abstract", comment.PostId);
+
+            return View(comment);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Moderate(int id, [Bind("Id, Body, ModeratedBody,ModerationType")] Comment comment)
+        {
+            if (id != comment.Id)
+            {
+                return NotFound();
+            }
+
+            var commentDb = await _context.Comments
+                .Include(c => c.Post)
+                .Include(c => c.BlogUser)
+                .FirstOrDefaultAsync(c => c.Id == comment.Id);
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    commentDb.ModeratedBody = comment.ModeratedBody;
+                    commentDb.ModerationType = comment.ModerationType;
+                    commentDb.Moderated = DateTime.Now;
+                    commentDb.ModeratorId = _userManager.GetUserId(User);
+
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CommentExists(comment.Id)) return NotFound();
+                    else throw;
+                }
+                return RedirectToAction("Details", "Posts", new { slug = commentDb.Post.Slug }, "commentSection");
+            }
+
             return View(comment);
         }
 
         // GET: Comments/Delete/5
+        [Authorize(Roles = "Administrator,Moderator")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -183,12 +228,12 @@ namespace AmbroBlogProject.Controllers
         // POST: Comments/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, string slug)
         {
             var comment = await _context.Comments.FindAsync(id);
             _context.Comments.Remove(comment);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Details", "Posts", new { slug }, "commentSection");
         }
 
         private bool CommentExists(int id)

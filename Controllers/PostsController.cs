@@ -86,6 +86,8 @@ namespace AmbroBlogProject.Controllers
                 .Include(p => p.Blog)
                 .Include(p => p.BlogUser)
                 .Include(p => p.Tags)
+                .Include(p => p.Comments)
+                .ThenInclude(c => c.BlogUser)// connected to Comments
                 .FirstOrDefaultAsync(m => m.Slug == slug);
 
             if (post == null) return NotFound();
