@@ -1,73 +1,73 @@
-﻿@using AmbroBlogProject.Services
-@using AmbroBlogProject.Models
+﻿@using AmbroBlogProject.Models
+@using AmbroBlogProject.Services
+@using AmbroBlogProject.Enums
+@using Microsoft.AspNetCore.Identity;
 @using X.PagedList
 @using X.PagedList.Mvc.Core
 @using X.PagedList.Web.Common
 
+@inject UserManager<BlogUser> userManager
 @inject IImageService imageService
+
 @model IPagedList<Post>
 
-@{
-    ViewData["Title"] = "Index";
-}
+<div class="row m-0">
+    @foreach (var post in Model)
+    {
+        //Is the logged in user the Author of this post??
+        var isAuthor = false;
+        if (User.Identity.IsAuthenticated)
+        {
+            isAuthor = isAuthor && (post.BlogUserId == userManager.GetUserId(User));
+        }
 
-<h1>Index</h1>
+        <div class="col-sm-2 col-lg-4">
+            <div class="card border-dark">
+                <img class="card-img-top" src="@imageService.DecodeImage(post.ImageDate,  post.ContentType)" />
+                <div class="card-body text-center">
+                    <div class="bg-warning">
+                        <hr class="card-hr" />
+                        <h5 class="card-title">@post.Title</h5>
+                        <hr class="card-hr" />
+                    </div>
+                    <div>
+                        <p class="card-text">@post.Abstract</p>
+                    </div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Image
-            </th>
-            <th>
-                Title
-            </th>
-            <th>
-                Abstract
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            
-            <td>
-                <img src="@imageService.DecodeImage(item.ImageDate, item.ContentType)" class="img-fluid" alt="@item.Title" width="150" height="150" style="object-fit:cover" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Abstract)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-slug="@item.Slug">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                    <br />
+                    <div class="text-center">
+                        <a class="btn btn-dark btn-sm btn-block mb-2" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">Read More</a>
+                    </div>
 
+                    @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
+                    {
+                        <div class="text-center">
+                            <a class="btn btn-success btn-sm btn-block border-dark" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">Edit Post</a>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+    }
+</div>
 
 <hr />
-<div class="row">
-    <div class="col">
-        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+<div class='container mx-auto text-center'>
+    <div class="row">
+        <div class="col h3">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col">
-        @Html.PagedListPager(Model, page => Url.Action("BlogPostIndex", new { id = Model.FirstOrDefault().BlogId, page = page }),
-         new PagedListRenderOptions
-         {
-             LiElementClasses = new string[] { "page-item " },
-             PageClasses = new string[] { "page-link" }
-         })
+    <div class="row">
+        <div class="col">
+            @Html.PagedListPager(Model, page => Url.Action("BlogPostIndex", new { id = Model.FirstOrDefault().BlogId, page = page }),
+                new PagedListRenderOptions
+                {
+                    LiElementClasses = new string[] { "page-item" },
+                    PageClasses = new string[] { "page-link" }
+                })
+        </div>
     </div>
 </div>
