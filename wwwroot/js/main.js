@@ -252,27 +252,15 @@
 
 
         axilSlickActivation: function (e) {
-            $('.slider-activation').slick({
-                infinite: true,
-                slidesToShow: 1,
-                slidesToScroll: 1,
-                arrows: true,
-                dots: false,
-                fade: true,
-                adaptiveHeight: true,
-                cssEase: 'linear',
-                prevArrow: '<button class="slide-arrow prev-arrow"><i class="fal fa-arrow-left"></i></button>',
-                nextArrow: '<button class="slide-arrow next-arrow"><i class="fal fa-arrow-right"></i></button>'
-            });
 
-            $('.modern-post-activation').slick({
+            $('.modern-post-activation').not('.slick-initialized').slick({
                 infinite: true,
                 slidesToShow: 3,
                 slidesToScroll: 1,
                 arrows: true,
                 dots: false,
-                prevArrow: '<button class="slide-arrow prev-arrow"><i class="fal fa-arrow-left"></i></button>',
-                nextArrow: '<button class="slide-arrow next-arrow"><i class="fal fa-arrow-right"></i></button>',
+                prevArrow: '<button class="slide-arrow prev-arrow"><i class="fas fa-arrow-left"></i></button>',
+                nextArrow: '<button class="slide-arrow next-arrow"><i class="fas fa-arrow-right"></i></button>',
                 responsive: [{
                     breakpoint: 992,
                     settings: {
@@ -308,8 +296,8 @@
                 fade: true,
                 adaptiveHeight: true,
                 cssEase: 'linear',
-                prevArrow: '<button class="slide-arrow prev-arrow"><i class="fal fa-arrow-left"></i></button>',
-                nextArrow: '<button class="slide-arrow next-arrow"><i class="fal fa-arrow-right"></i></button>',
+                prevArrow: '<button class="slide-arrow prev-arrow"><i class="fas fa-arrow-left"></i></button>',
+                nextArrow: '<button class="slide-arrow next-arrow"><i class="fas fa-arrow-right"></i></button>',
             });
 
             $('.categories-activation').slick({
@@ -319,8 +307,8 @@
                 arrows: true,
                 dots: false,
                 adaptiveHeight: true,
-                prevArrow: '<button class="slide-arrow prev-arrow"><i class="fal fa-arrow-left"></i></button>',
-                nextArrow: '<button class="slide-arrow next-arrow"><i class="fal fa-arrow-right"></i></button>',
+                prevArrow: '<button class="slide-arrow prev-arrow"><i class="fas fa-arrow-left"></i></button>',
+                nextArrow: '<button class="slide-arrow next-arrow"><i class="fas fa-arrow-right"></i></button>',
                 responsive: [{
                     breakpoint: 992,
                     settings: {
