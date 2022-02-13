@@ -46,20 +46,20 @@ namespace AmbroBlogProject.Controllers
                             .OrderByDescending(b => b.Created)
                             .ToListAsync();
 
-            var posts = await _ctx.Posts
-                                    .Where(b => b.ReadyStatus == Enums.ReadyStatus.ProductionReady)
-                                    .OrderByDescending(b => b.Created)
-                                    .Include(b => b.BlogUser)
-                                    .ToPagedListAsync(pageNum, pageSize);
-            /*var featured = posts.Where(b => b.)*/
+            var productionPosts = _ctx.Posts.Where(b => b.ReadyStatus == Enums.ReadyStatus.ProductionReady)
+                                  .Include(b => b.BlogUser)
+                                  .OrderByDescending(b => b.Created);
+
+            var featured = await productionPosts.Where(b => b.isFeatured).ToListAsync();
 
             ViewData["MainText"] = "Blog";
             ViewData["SubText"] = "A Blog by Mark Ambrocio";
 
             ViewData["HeaderImage"] = "/images/home-bg.jpg";
             ViewData["Categories"] = blogs;
+            ViewData["Featured"] = featured;
 
-            return View(posts);
+            return View(await productionPosts.ToPagedListAsync(pageNum, pageSize));
         }
 
         public IActionResult About()

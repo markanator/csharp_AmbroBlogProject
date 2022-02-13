@@ -7,11 +7,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace AmbroBlogProject.Data.Migrations
+namespace AmbroBlogProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220130071445_001")]
-    partial class _001
+    [Migration("20220213213004_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -74,6 +74,11 @@ namespace AmbroBlogProject.Data.Migrations
 
                     b.Property<string>("ContentType")
                         .HasColumnType("text");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -242,6 +247,9 @@ namespace AmbroBlogProject.Data.Migrations
 
                     b.Property<DateTime?>("Updated")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("isFeatured")
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 

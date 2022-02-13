@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace AmbroBlogProject.Data.Migrations
+namespace AmbroBlogProject.Migrations
 {
-    public partial class _001 : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -201,7 +201,8 @@ namespace AmbroBlogProject.Data.Migrations
                     ReadyStatus = table.Column<int>(type: "integer", nullable: false),
                     Slug = table.Column<string>(type: "text", nullable: true),
                     ImageDate = table.Column<byte[]>(type: "bytea", nullable: true),
-                    ContentType = table.Column<string>(type: "text", nullable: true)
+                    ContentType = table.Column<string>(type: "text", nullable: true),
+                    isFeatured = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {

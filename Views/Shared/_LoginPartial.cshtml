@@ -1,17 +1,38 @@
-﻿@using Microsoft.AspNetCore.Identity
+﻿@using AmbroBlogProject.Enums
+@using AmbroBlogProject.Services
+@using Microsoft.AspNetCore.Identity
+
+@inject IImageService _imageService
 @inject SignInManager<BlogUser> SignInManager
 @inject UserManager<BlogUser> UserManager
 
-<ul class="metabar-block">
+@{
+    var user = await UserManager.GetUserAsync(User);
+}
+
+
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="">
-        <a  class="" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity.Name!</a>
-    </li>
-    <li class="">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="p-1 nav-link btn btn-link btn-sm">Logout</button>
-        </form>
+    <li>
+        <div class="dropdown">
+            <a href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="@_imageService.DecodeImage(user.ImageData, user.ContentType)" alt="@user.FullName" style="height:40px;width:40px;" />
+            </a>
+          <ul class="dropdown-menu fs-6" aria-labelledby="dropdownMenuButton">
+              <li class="mx-0"><a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account Management</a></li>
+              @if (User.IsInRole(BlogRole.Administrator.ToString()))
+             {
+                 <li class="mx-0"><a class="dropdown-item" asp-action="Index" asp-controller="Blogs" >Edit Blogs</a></li>
+                 <li class="mx-0"><a class="dropdown-item" asp-action="Index" asp-controller="Posts" >Edit Posts</a></li>
+                 <li class="mx-0"><a class="dropdown-item" asp-action="Index" asp-controller="Comments" >Edit Comments</a></li>
+             }
+              <li class="mx-0">
+                <form  class="form-inline dropdown-item" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button  type="submit" class="border-0 text-start">Logout</button>
+                </form>
+            </li>
+          </ul>
+        </div>
     </li>
 }
 else
@@ -23,7 +44,6 @@ else
         <a class="" asp-area="Identity" asp-page="/Account/Login">Login</a>
     </li>
 }
-</ul>
 
 @*<ul class="metabar-block">
     <li class="icon"><a href="https://axilthemes.com/demo/template/blogar/index.html#"><i class="fas fa-bookmark"></i></a></li>

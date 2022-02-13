@@ -3,6 +3,7 @@
 @using AmbroBlogProject.Services
 @using Microsoft.AspNetCore.Identity
 @using System.Collections.Generic
+@using System.Linq
 @using X.PagedList
 @using X.PagedList.Mvc.Core
 @using X.PagedList.Web.Common
@@ -14,6 +15,7 @@
 
 @{
     ViewData["Title"] = "Home Page";
+    var featuredPosts = (List<Post>)ViewData["Featured"];
     var cats = (List<Blog>)ViewData["Categories"];
 }
 
@@ -206,54 +208,62 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-xl-8">
-
-                @foreach (var post in Model)
-               {
-                   <!-- Start Post List  -->
-                <div class="content-block post-list-view axil-control is-active mt--30">
-                    <div class="post-thumbnail">
-                        <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
-                            <img src="@_imageService.DecodeImage(post.ImageDate, post.ContentType)"  alt="@post.Title">
-                        </a>
-                    </div>
-                    <div class="post-content">
-                        <div class="post-cat">
-                            <div class="post-cat-list">
-                                <a class="hover-flip-item-wrapper" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@post.BlogId">
-                                    <span class="hover-flip-item">
-                                        <span data-text="@post.Blog.Name">@post.Blog.Name</span>
-                                    </span>
+                @if (Model.Any())
+                {
+                    @foreach (var post in Model)
+                    {
+                        <!-- Start Post List  -->
+                        <div class="content-block post-list-view axil-control is-active mt--30">
+                            <div class="post-thumbnail">
+                                <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
+                                    <img src="@_imageService.DecodeImage(post.ImageDate, post.ContentType)"  alt="@post.Title">
                                 </a>
                             </div>
-                        </div>
-                        <h4 class="title"><a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">@post.Title</a></h4>
-                        <div class="post-meta-wrapper">
-                            <div class="post-meta">
-                                <div class="content">
-                                    <h6 class="post-author-name">
-                                        <span class="hover-flip-item-wrapper">  @* TODO: was previously an anchor *@
+                            <div class="post-content">
+                                <div class="post-cat">
+                                    <div class="post-cat-list">
+                                        <a class="hover-flip-item-wrapper" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@post.BlogId">
                                             <span class="hover-flip-item">
-                                                <span data-text="@post.BlogUser.FullName">@post.BlogUser.FullName</span>
+                                                <span data-text="@post.Blog.Name">@post.Blog.Name</span>
                                             </span>
-                                        </span>
-                                    </h6>
-                                    <ul class="post-meta-list">
-                                        <li>@post.Created.ToString("MMM dd, yyyy")</li>
-                                        @*<li>3 min read</li>*@
+                                        </a>
+                                    </div>
+                                </div>
+                                <h4 class="title"><a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">@post.Title</a></h4>
+                                <div class="post-meta-wrapper">
+                                    <div class="post-meta">
+                                        <div class="content">
+                                            <h6 class="post-author-name">
+                                                <span class="hover-flip-item-wrapper">  @* TODO: was previously an anchor *@
+                                                    <span class="hover-flip-item">
+                                                        <span data-text="@post.BlogUser.FullName">@post.BlogUser.FullName</span>
+                                                    </span>
+                                                </span>
+                                            </h6>
+                                            <ul class="post-meta-list">
+                                                <li>@post.Created.ToString("MMM dd, yyyy")</li>
+                                                @*<li>3 min read</li>*@
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <ul class="social-share-transparent justify-content-end">
+                                        <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                        <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                                        <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                        <li><a href="#"><i class="fas fa-link"></i></a></li>
                                     </ul>
                                 </div>
                             </div>
-                            <ul class="social-share-transparent justify-content-end">
-                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
-                                <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
-                                <li><a href="#"><i class="fas fa-link"></i></a></li>
-                            </ul>
                         </div>
+                        <!-- End Post List  -->
+                    }
+                } 
+                else
+                {
+                    <div class="content-block post-list-view axil-control is-active mt--30">
+                        <h3>No Posts Found.</h3>
                     </div>
-                </div>
-                <!-- End Post List  -->
-               }
+                }
             </div>
 
             <div class="col-lg-4 col-xl-4 mt_md--40 mt_sm--40">
