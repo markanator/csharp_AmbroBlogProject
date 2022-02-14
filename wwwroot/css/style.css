@@ -7964,30 +7964,34 @@ button.video-popup:hover {
 
 /* Scroll To Top  */
 #backto-top {
-  display: inline-block;
-  background-color: var(--color-primary);
-  width: 50px;
-  height: 50px;
-  text-align: center;
-  border-radius: 100%;
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  -webkit-transition: background-color .3s,
- opacity .5s, visibility .5s;
-  -o-transition: background-color .3s,
- opacity .5s, visibility .5s;
-  transition: background-color .3s,
- opacity .5s, visibility .5s;
-  opacity: 0;
-  visibility: hidden;
-  z-index: 1000;
-  cursor: pointer;
+    display: inline-block;
+    background-color: var(--color-primary);
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    border-radius: 100%;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    -webkit-transition: background-color .3s, opacity .5s, visibility .5s;
+    -o-transition: background-color .3s, opacity .5s, visibility .5s;
+    transition: background-color .3s, opacity .5s, visibility .5s;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1000;
+    cursor: pointer;
+    color: rgba(255,255,255,0.0);
+    transition: color .2s ease-in-out;
 }
 
 #backto-top.show {
-  opacity: 1;
-  visibility: visible;
+    opacity: 1;
+    visibility: visible;
+    color: rgba(255,255,255,0.85);
+}
+
+#backto-top.show:hover {
+    color: rgba(255,255,255,1.0);
 }
 
 /*--------------------
@@ -8177,8 +8181,7 @@ Breadcrumb Styles
 .my_switcher ul li a {
   position: relative;
   font-family: var(--font-primary);
-  font-size: 1.4rem;
-  line-height: 2.2rem;
+  font-size: 11px;
   color: var(--color-primary);
   font-weight: 600;
   text-transform: uppercase;
