@@ -23,7 +23,83 @@
 <h1 class="d-none">Home Default Blog</h1>
 @if (featuredPosts.Any())
 {
-    <h1>FEATURED</h1>
+    <div class="slider-area bg-color-grey" style="padding-bottom:50px;">
+        <div class="axil-slide slider-style-1">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="slider-activation axil-slick-arrow">
+                            @foreach (var fPost in featuredPosts)
+                           {
+                               <div class="content-block">
+
+                                <div class="post-thumbnail">
+                                    <a asp-action="Details" asp-controller="Posts" asp-route-slug="@fPost.Slug" tabindex="0">
+                                        <img 
+                                            src="@_imageService.DecodeImage(fPost.ImageDate, fPost.ContentType)"
+                                            alt="@fPost.Title" 
+                                            style="max-height:615px;object-fit:cover;">
+                                    </a>
+                                </div>
+
+                                <div class="post-content">
+                                    <div class="post-cat">
+                                        <div class="post-cat-list">
+                                            <a class="hover-flip-item-wrapper" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@fPost.BlogId" tabindex="0">
+                                                <span class="hover-flip-item">
+                                                    <span data-text="@fPost.Blog.Name">@fPost.Blog.Name</span>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <h2 class="title">
+                                        <a asp-action="Details" asp-controller="Posts" asp-route-slug="@fPost.Slug"tabindex="0">@fPost.Title</a>
+                                    </h2>
+                                    <!-- Post Meta  -->
+                                    <div class="post-meta-wrapper with-button">
+                                        <div class="post-meta">
+                                            <div class="post-author-avatar border-rounded">
+                                                <img 
+                                                    src="@_imageService.DecodeImage(fPost.BlogUser.ImageData, fPost.BlogUser.ContentType)" 
+                                                    alt="@fPost.BlogUser.FullName" 
+                                                    style="height:50px; width:50px;">
+                                            </div>
+                                            <div class="content">
+                                                <h6 class="post-author-name">
+                                                    <span class="hover-flip-item-wrapper">
+                                                        <span class="hover-flip-item">
+                                                            <span data-text="@fPost.BlogUser.FullName">@fPost.BlogUser.FullName</span>
+                                                        </span>
+                                                    </span>
+                                                </h6>
+                                                <ul class="post-meta-list">
+                                                    <li>@fPost.Created.ToString("MMM dd, yyyy")</li>
+                                                    @*<li>300k Views</li>*@
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="read-more-button cerchio" style="transform: matrix(1, 0, 0, 1, 0, 0);">
+                                            <a 
+                                                class="axil-button button-rounded hover-flip-item-wrapper" 
+                                                asp-action="Details" 
+                                                asp-controller="Posts" 
+                                                asp-route-slug="@fPost.Slug" 
+                                                tabindex="0">
+                                                <span class="hover-flip-item">
+                                                    <span data-text="Read Post">Read Post</span>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 
 

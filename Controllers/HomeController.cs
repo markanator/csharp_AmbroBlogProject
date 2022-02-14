@@ -51,6 +51,7 @@ namespace AmbroBlogProject.Controllers
                                   .OrderByDescending(b => b.Created);
 
             var featured = await productionPosts.Where(b => b.isFeatured).ToListAsync();
+            var nonFeaturedPosts = productionPosts.Where(p => !p.isFeatured);
 
             ViewData["MainText"] = "Blog";
             ViewData["SubText"] = "A Blog by Mark Ambrocio";
@@ -59,7 +60,7 @@ namespace AmbroBlogProject.Controllers
             ViewData["Categories"] = blogs;
             ViewData["Featured"] = featured;
 
-            return View(await productionPosts.ToPagedListAsync(pageNum, pageSize));
+            return View(await nonFeaturedPosts.ToPagedListAsync(pageNum, pageSize));
         }
 
         public IActionResult About()
