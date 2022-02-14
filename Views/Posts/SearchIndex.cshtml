@@ -13,6 +13,17 @@
 }
 
 <div class="main-wrapper">
+<div class="axil-breadcrumb-area breadcrumb-style-1 bg-color-grey mb-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="inner d-flex justify-content-between align-items-center">
+                    <h1 class="page-title">Search results for: "@ViewData["SearchTerm"]"</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
     <!-- Start Post List Wrapper  -->
     <div class="axil-post-list-area post-listview-visible-color axil-section-gap bg-color-white">
         <div class="container">
@@ -134,32 +145,7 @@
     </div>
 </div>
 
-@*<div class="row mx-0">
-    @foreach(var post in Model)
-     {
-        <div class=" col-sm-2 col-lg-4 mt-3">
-            <div class="card border-dark">
-                <div class="card-body text-center">
-                    <div class="bg-warning">
-                        <hr />
-                        <h5 class="card-title">@post.Title</h5>
-                        <hr />
-                    </div>
-                    <div>
-                        <p class="card-text">@post.Abstract</p>
-                    </div>
-                    <br />
-                    <div class="text-center">
-                        <a class="btn btn-dark btn-sm mb-2" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">Read More</a>
-                    </div>
-                </div>
-                <img class="card-img-bottom" src="@imageService.DecodeImage(post.ImageDate, post.ContentType)" alt="Post Image"/>
-            </div>
-        </div>
-     }
-</div>
 
-<hr />
 
 <div class="container mx-auto text-center">
     <div class="row">
@@ -178,4 +164,4 @@
                 })
         </div>
     </div>
-</div>*@
+</div>
