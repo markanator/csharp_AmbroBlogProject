@@ -1,0 +1,58 @@
+﻿<header class="header axil-header  header-light header-sticky header-with-shadow">
+    <div class="header-wrap">
+        <div class="row justify-content-between align-items-center">
+            <div class="col-xl-3 col-lg-3 col-md-4 col-sm-3 col-12">
+                <div class="">
+                    <a class="" asp-controller="Home" asp-action="Index">Blog: Mark Ambro</a>
+                </div>
+            </div>
+
+            <div class="col-xl-6 d-none d-xl-block">
+                <div class="mainmenu-wrapper">
+                    <nav class="mainmenu-nav">
+
+                        <!-- Start Mainmanu Nav -->
+                        <ul class="mainmenu">
+                            <li><a asp-controller="Home" asp-action="About">About</a></li>
+                            <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                        </ul>
+
+                    </nav>
+                </div>
+            </div>
+
+            <div class="col-xl-3 col-lg-8 col-md-8 col-sm-9 col-12">
+                <div class="header-search text-end d-flex align-items-center">
+                    <form class="header-search-form d-sm-block d-none" asp-action="SearchIndex" asp-controller="Posts">
+                        <div class="axil-search form-group">
+                            <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+                            <input type="text" name="SearchTerm"  class="form-control" placeholder="Search">
+                        </div>
+                    </form>
+                    <div class="mobile-search-wrapper d-sm-none d-block">
+                        <button class="search-button-toggle"><i class="fas fa-search"></i></button>
+                        <form class="header-search-form" asp-action="SearchIndex" asp-controller="Posts">
+                            <div class="axil-search form-group">
+                                <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+                                <input type="text" name="SearchTerm"  class="form-control" placeholder="Search" />
+                            </div>
+                        </form>
+                    </div>
+                    <ul class="metabar-block">
+
+                        <partial name="_LoginPartial" />
+                    </ul>
+                    
+
+                    <!-- Start Hamburger Menu  -->
+                    <div class="hamburger-menu d-block d-xl-none">
+                        <div class="hamburger-inner">
+                            <div class="icon"><i class="fas fa-bars"></i></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</header>

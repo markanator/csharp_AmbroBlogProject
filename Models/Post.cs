@@ -55,6 +55,8 @@ namespace AmbroBlogProject.Models
         [NotMapped]
         public IFormFile Image { get; set; }
 
+        public bool isFeatured { get; set; }
+
         // navigation  
         public virtual Blog Blog { get; set; }
         public virtual BlogUser BlogUser { get; set; }

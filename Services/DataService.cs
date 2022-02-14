@@ -62,8 +62,8 @@ namespace AmbroBlogProject.Services
             // s1: create new instance of user
             var adminUser = new BlogUser()
             {
-                Email = "AdminUser@example.com",
-                UserName = "AdminUser@example.com",
+                Email = "adminUser@example.com",
+                UserName = "adminuser@example.com",
                 FirstName = "Admin",
                 LastName = "User",
                 DisplayName = "Admin User",

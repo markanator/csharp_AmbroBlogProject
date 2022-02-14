@@ -2,7 +2,7 @@
 @inject IConfiguration _configuration
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="js sizes customelements history pointerevents postmessage webgl websockets cssanimations csscolumns csscolumns-width csscolumns-span csscolumns-fill csscolumns-gap csscolumns-rule csscolumns-rulecolor csscolumns-rulestyle csscolumns-rulewidth csscolumns-breakbefore csscolumns-breakafter csscolumns-breakinside flexbox picture srcset webworkers sizes customelements history pointerevents postmessage webgl websockets cssanimations csscolumns csscolumns-width csscolumns-span csscolumns-fill csscolumns-gap csscolumns-rule csscolumns-rulecolor csscolumns-rulestyle csscolumns-rulewidth csscolumns-breakbefore csscolumns-breakafter csscolumns-breakinside flexbox picture srcset webworkers">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -11,152 +11,70 @@
     
     <title>Blog: Mark Ambro - @ViewData["Title"]</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="~/css/bootstrap.min.css" rel="stylesheet" />
-
-
     <!-- Custom fonts for this template -->
-    <link href="~/css/all.min.css" rel="stylesheet" type="text/css">
     <link href='//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
 
-    <!-- include summernote css/js -->
+    <!-- EXTERNAL files -->
+    <script src="https://kit.fontawesome.com/491788ad15.js" crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" rel="stylesheet" type="text/css" />
 
     <!-- Custom styles for this template -->
-    <link href="~/css/clean-blog.min.css" rel="stylesheet" />
-    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/base.css" rel="stylesheet" />
+    <link href="~/css/style.css" rel="stylesheet" />
 </head>
-<body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-        <div class="container">
-            <a class="navbar-brand" asp-controller="Home" asp-action="Index">Blog: Mark Ambro</a>
-            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            Menu
-            <i class="fas fa-bars"></i>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                
-                @if (User.IsInRole("Moderator") || User.IsInRole("Administrator"))
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Comments" asp-action="Index">User<br />Comments</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Comments" asp-action="ModeratedIndex">Moderated<br />Comments</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Comments" asp-action="DeletedIndex">Deleted<br />Comments</a>
-                    </li>
-                }
-                else {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Home" asp-action="About">About</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Home" asp-action="Contact">Contact</a>
-                    </li>
-                }
-
-                @if (User.IsInRole("Administrator"))
-                {
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Blogs" asp-action="Create">Create Blog</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Posts" asp-action="Create">Create Post</a>
-                    </li>
-                }
+<body class="active-light-mode">
+    <div class="main-wrapper">
+        @* Light Dark mode Switcher *@
+        <div id="my_switcher" class="my_switcher">
+            <ul>
+                <li>
+                    <a href="javascript: void(0);" data-theme="light" class="setColor light active">
+                        <span title="Light Mode">Light</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" data-theme="dark" class="setColor dark">
+                        <span title="Dark Mode">Dark</span>
+                    </a>
+                </li>
             </ul>
-            <partial name="_LoginPartial" />
-            </div>
         </div>
-    </nav>
 
-    <!-- Page Header -->
-    <header class="masthead" style="background-image: url(@(@ViewData["HeaderImage"] == null ? $"/img/{_configuration["DefaultHeaderImage"]}" : ViewData["HeaderImage"]))">
-        <div class="overlay"></div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-md-10 mx-auto">
-                    <div class="site-heading">
-                        <h1>@ViewData["MainText"]</h1>
-                        <span class="subheading">@ViewData["SubText"]</span>
+        <!-- Navigation -->
+        <partial name="_Navbar" />
+        <partial name="_MobileMenu" />
 
-                        <form asp-action="SearchIndex" asp-controller="Posts">
-                            <div class="input-group mt-5">
-                                <input type="text" name="SearchTerm" class="form-control h-auto" placeholder="Search Term">
-                                <div class="input-group-append">
-                                    <button class="btn btn-warning btn-block btn-sm" type="submit">Search</button>
-                                </div>
-                            </div>
-                        </form>
+       
 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content -->
-    @RenderBody()
-
-    <!-- Footer-->
-    <footer class="border-top">
-        <div class="container px-4 px-lg-5">
-            <div class="row gx-4 gx-lg-5 justify-content-center">
-                <div class="col-md-10 col-lg-8 col-xl-7">
-                    <ul class="list-inline text-center">
-                        <li class="list-inline-item">
-                            <a href="https://twitter.com/_mark_ambro" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fas fa-circle fa-stack-2x"></i>
-                                    <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="https://www.linkedin.com/in/mark-ambrocio/" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fas fa-circle fa-stack-2x"></i>
-                                    <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <li class="list-inline-item">
-                            <a href="https://github.com/markanator" target="_blank">
-                                <span class="fa-stack fa-lg">
-                                    <i class="fas fa-circle fa-stack-2x"></i>
-                                    <i class="fab fa-github fa-stack-1x fa-inverse"></i>
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                    <div class="small text-center text-muted fst-italic">Copyright &copy; Mark Ambrocio 2021</div>
-                </div>
-            </div>
-        </div>
-    </footer>
+        <!-- Main Content -->
+        @RenderBody()
 
         
-    <!-- Bootstrap core JavaScript -->
-    <script src="~/js/jquery.min.js"></script>
-    <script src="~/js/bootstrap.bundle.min.js"></script>
+        <partial name="_Footer" />
 
-    <!-- Custom scripts for this template -->
-    <script src="~/js/clean-blog.min.js"></script>
+        <script src="~/js/modernizr-custom.js"></script>
+        <script src="~/js/tweenmax.min.js"></script>
+        
+        @*CDNs*@
+        <!-- JavaScript Bundle with Popper -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.4.0/dist/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.0/slick.min.js" integrity="sha512-XtmMtDEcNz2j7ekrtHvOVR4iwwaD6o/FUJe6+Zq+HgcCsk3kj4uSQQR8weQ2QVj1o0Pk6PwYLohm206ZzNfubg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    @*CDNs*@
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+        <!-- Custom scripts for this template -->
+        <script src="~/js/jQuery.style.switcher.min.js"></script>
+        <script src="~/js/tweenmax.min.js"></script>
+        <script src="~/js/main.js"></script>
 
-
-    @await RenderSectionAsync("Scripts", required: false)
+        @await RenderSectionAsync("Scripts", required: false)
+    </div>
 </body>
 </html>

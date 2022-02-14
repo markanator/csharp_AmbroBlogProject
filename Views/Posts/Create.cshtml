@@ -2,14 +2,22 @@
 @model AmbroBlogProject.Models.Post
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Create a New Post";
 }
 
-<h1>Create</h1>
+<div class="axil-breadcrumb-area breadcrumb-style-1 bg-color-grey mb-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="inner d-flex justify-content-between align-items-center">
+                    <h1 class="page-title">@ViewData["Title"]</h1>
 
-<h4>Post</h4>
-<hr />
-<div class="container mx-auto row">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container mx-auto row py-4">
     <div class="col mb-4">
         <form asp-action="Create" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -73,6 +81,11 @@
                 <label asp-for="ReadyStatus" class="control-label"></label>
                 <select asp-for="ReadyStatus" asp-items="@Html.GetEnumSelectList<ReadyStatus>()" class="form-control"></select>
                 <span asp-validation-for="ReadyStatus" class="text-danger"></span>
+            </div>
+
+            <div class="form-check py-4">
+                <input class="form-check-input" asp-for="isFeatured" type="checkbox" id="isFeatured"/> 
+                <label class="form-check-label fs-4" for="isFeatured">Feature this post on the homepage?</label>
             </div>
 
             <div class="form-group">

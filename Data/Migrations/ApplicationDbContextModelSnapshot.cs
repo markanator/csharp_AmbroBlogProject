@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace AmbroBlogProject.Data.Migrations
+namespace AmbroBlogProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -72,6 +72,11 @@ namespace AmbroBlogProject.Data.Migrations
 
                     b.Property<string>("ContentType")
                         .HasColumnType("text");
+
+                    b.Property<string>("DisplayName")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -240,6 +245,9 @@ namespace AmbroBlogProject.Data.Migrations
 
                     b.Property<DateTime?>("Updated")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("isFeatured")
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 

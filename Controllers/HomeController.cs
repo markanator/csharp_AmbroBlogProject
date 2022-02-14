@@ -39,20 +39,28 @@ namespace AmbroBlogProject.Controllers
         public async Task<IActionResult> Index(int? page)
         {
             var pageNum = page ?? 1;
-            var pageSize = 5;
+            var pageSize = 6;
 
-                            /*.Where(b => b.Posts.Any(p => p.ReadyStatus == Enums.ReadyStatus.ProductionReady))*/
-            var blogs = _ctx.Blogs
+            var blogs = await _ctx.Blogs
                             .Include(b => b.BlogUser)
                             .OrderByDescending(b => b.Created)
-                            .ToPagedListAsync(pageNum, pageSize);
+                            .ToListAsync();
+
+            var productionPosts = _ctx.Posts.Where(b => b.ReadyStatus == Enums.ReadyStatus.ProductionReady)
+                                  .Include(b => b.BlogUser)
+                                  .OrderByDescending(b => b.Created);
+
+            var featured = await productionPosts.Where(b => b.isFeatured).ToListAsync();
+            var nonFeaturedPosts = productionPosts.Where(p => !p.isFeatured);
 
             ViewData["MainText"] = "Blog";
             ViewData["SubText"] = "A Blog by Mark Ambrocio";
 
             ViewData["HeaderImage"] = "/images/home-bg.jpg";
+            ViewData["Categories"] = blogs;
+            ViewData["Featured"] = featured;
 
-            return View(await blogs);
+            return View(await nonFeaturedPosts.ToPagedListAsync(pageNum, pageSize));
         }
 
         public IActionResult About()

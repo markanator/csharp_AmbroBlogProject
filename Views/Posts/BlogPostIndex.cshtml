@@ -7,52 +7,142 @@
 @using X.PagedList.Web.Common
 
 @inject UserManager<BlogUser> userManager
-@inject IImageService imageService
+@inject IImageService _imageService
 
 @model IPagedList<Post>
 
-<div class="row m-0">
-    @foreach (var post in Model)
-    {
-        //Is the logged in user the Author of this post??
-        var isAuthor = false;
-        if (User.Identity.IsAuthenticated)
-        {
-            isAuthor = isAuthor && (post.BlogUserId == userManager.GetUserId(User));
-        }
+@{
+    // blogs OKA categories
+    var cats = (List<Blog>)ViewData["Categories"];
+}
 
-        <div class="col-sm-2 col-lg-4">
-            <div class="card border-dark">
-                <img class="card-img-top" src="@imageService.DecodeImage(post.ImageDate,  post.ContentType)" />
-                <div class="card-body text-center">
-                    <div class="bg-warning">
-                        <hr class="card-hr" />
-                        <h5 class="card-title">@post.Title</h5>
-                        <hr class="card-hr" />
+<div class="main-wrapper">
+    <div class="axil-breadcrumb-area breadcrumb-style-1 bg-color-grey">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="inner">
+                        <h1 class="page-title">@ViewData["BlogTitle"]</h1>
                     </div>
-                    <div>
-                        <p class="card-text">@post.Abstract</p>
-                    </div>
-
-                    <br />
-                    <div class="text-center">
-                        <a class="btn btn-dark btn-sm btn-block mb-2" asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">Read More</a>
-                    </div>
-
-                    @if (User.IsInRole(BlogRole.Administrator.ToString()) || isAuthor)
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Start Post List Wrapper  -->
+    <div class="axil-post-list-area post-listview-visible-color axil-section-gap bg-color-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-xl-8">
+                    @if (Model.Any())
                     {
-                        <div class="text-center">
-                            <a class="btn btn-success btn-sm btn-block border-dark" asp-action="Edit" asp-controller="Posts" asp-route-id="@post.Id">Edit Post</a>
+                        @foreach (var post in Model)
+                        {
+                            <!-- Start Post List  -->
+                            <div class="content-block post-list-view axil-control is-active mt--30">
+                                <div class="post-thumbnail">
+                                    <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
+                                        <img src="@_imageService.DecodeImage(post.ImageDate, post.ContentType)"  alt="@post.Title">
+                                    </a>
+                                </div>
+                                <div class="post-content">
+                                    <div class="post-cat">
+                                        <div class="post-cat-list">
+                                            <a class="hover-flip-item-wrapper" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@post.BlogId">
+                                                <span class="hover-flip-item">
+                                                    <span data-text="@post.Blog.Name">@post.Blog.Name</span>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <h4 class="title"><a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">@post.Title</a></h4>
+                                    <div class="post-meta-wrapper">
+                                        <div class="post-meta">
+                                            <div class="content">
+                                                <h6 class="post-author-name">
+                                                    <span class="hover-flip-item-wrapper">
+                                                        <span class="hover-flip-item">
+                                                            <span data-text="@post.BlogUser.FullName">@post.BlogUser.FullName</span>
+                                                        </span>
+                                                    </span>
+                                                </h6>
+                                                <ul class="post-meta-list">
+                                                    <li>@post.Created.ToString("MMM dd, yyyy")</li>
+
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Post List  -->
+                        }
+                    } 
+                    else
+                    {
+                        <div class="content-block post-list-view axil-control is-active mt--30">
+                            <h3>Nothing Found.</h3>
                         </div>
                     }
                 </div>
+
+                <div class="col-lg-4 col-xl-4 mt_md--40 mt_sm--40">
+                    <!-- Start Sidebar Area  -->
+                    <div class="sidebar-inner">
+
+                        <!-- Start Single Widget  -->
+                        <div class="axil-single-widget widget widget_categories mb--30">
+                            <ul>
+                                @foreach (var cat in cats)
+                               {
+                                <li class="cat-item">
+                                    <a asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@cat.Id" class="inner">
+                                        <div class="thumbnail">
+                                            <img src="@_imageService.DecodeImage(cat.ImageData, cat.ContentType)" alt="@cat.Name" style="width:50px;height:50px;object-fit:cover;">
+                                        </div>
+                                        <div class="content overflow-hidden">
+                                            <h5 class="title text-nowrap text-truncate">@cat.Name</h5>
+                                        </div>
+                                    </a>
+                                </li>
+                               }
+                            </ul>
+                        </div>
+                        <!-- End Single Widget  -->
+
+                        <!-- Start Single Widget  -->
+                        <div class="axil-single-widget widget widget_search mb--30">
+                            <h5 class="widget-title">Search</h5>
+                            <form asp-action="SearchIndex" asp-controller="Posts">
+                                <div class="axil-search form-group">
+                                    <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+                                    <input type="text" name="SearchTerm"  class="form-control" placeholder="Search">
+                                </div>
+                            </form>
+                        </div>
+                        <!-- End Single Widget  -->
+
+                        <!-- Start Single Widget  -->
+                        <div class="axil-single-widget widget widget_social mb--30">
+                            <h5 class="widget-title">Stay In Touch</h5>
+                            <!-- Start Post List  -->
+                            <ul class="social-icon md-size justify-content-center">
+                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fab fa-slack"></i></a></li>
+                                <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                            </ul>
+                            <!-- End Post List  -->
+                        </div>
+                        <!-- End Single Widget  -->
+                    </div>
+                    <!-- End Sidebar Area  -->
+                </div>
             </div>
-
         </div>
-    }
+    </div>
 </div>
-
-<hr />
 
 <div class='container mx-auto text-center'>
     <div class="row">
