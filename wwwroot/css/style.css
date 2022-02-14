@@ -11169,20 +11169,20 @@ blockquote p {
   }
 }
 
-.wp-block-image.alignwide {
-  margin-left: -105px;
-  margin-right: -105px;
+.post-image.alignwide {
+    margin-left: -105px;
+    margin-right: -105px;
 }
 
-.wp-block-image.alignfull,
+.post-image.alignfull,
 .wp-block-cover.alignfull {
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
-  max-width: 100vw;
-  width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    max-width: 100vw;
+    width: 100vw;
 }
 
-.wp-block-image.alignfull img,
+.post-image.alignfull img,
 .wp-block-cover.alignfull img {
   max-width: 100%;
   width: 100%;
@@ -11274,14 +11274,15 @@ blockquote p {
   display: flex;
 }
 
-.about-author .thumbnail a img {
+.about-author .thumbnail span img {
   border-radius: 100%;
   margin-right: 53px;
   margin-bottom: 20px;
+  object-fit: cover;
 }
 
 @media only screen and (max-width: 767px) {
-  .about-author .thumbnail a img {
+  .about-author .thumbnail span img {
     margin-right: 20px;
   }
 }
@@ -11667,6 +11668,8 @@ blockquote p {
 .comment-list .comment .single-comment .comment-img img {
   border-radius: 100%;
   width: 100%;
+  height: 60px;
+  width: 60px;
 }
 
 .comment-list .comment .commenter {
@@ -12385,14 +12388,14 @@ Instagram Styles
   border-bottom: 0 none;
 }
 
-.axil-author-banner .about-author .thumbnail a img {
+.axil-author-banner .about-author .thumbnail span img {
   border-radius: 100%;
   margin-right: 53px;
   margin-bottom: 20px;
 }
 
 @media only screen and (max-width: 767px) {
-  .axil-author-banner .about-author .thumbnail a img {
+  .axil-author-banner .about-author .thumbnail span img {
     margin-right: 20px;
   }
 }

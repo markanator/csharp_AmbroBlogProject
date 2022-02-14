@@ -92,6 +92,7 @@ namespace AmbroBlogProject.Controllers
             var post = await _context.Posts
                 .Include(p => p.BlogUser)
                 .Include(p => p.Tags)
+                .Include(p => p.Blog)
                 .Include(p => p.Comments)
                 .ThenInclude(c => c.BlogUser)// connected to Comments
                 .Include(p => p.Comments)
