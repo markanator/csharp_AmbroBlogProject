@@ -5,48 +5,59 @@
 @model IEnumerable<Post>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Posts Home";
 }
 
-<h1>Index</h1>
+<div class="axil-breadcrumb-area breadcrumb-style-1 bg-color-grey mb-4">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="inner d-flex justify-content-between align-items-center">
+                    <h1 class="page-title">@ViewData["Title"]</h1>
+                    
+                    <a asp-action="Create" class="btn btn-success">Create New</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Abstract)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
+<div class="container-xxl">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Image)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Abstract)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model) {
+                <tr>
             
-            <td>
-                <img src="@imageService.DecodeImage(item.ImageDate, item.ContentType)" class="img-fluid" alt="@item.Title" width="150" height="150" style="object-fit:cover" />
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Abstract)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-slug="@item.Slug">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                    <td>
+                        <img src="@imageService.DecodeImage(item.ImageDate, item.ContentType)" class="img-fluid" alt="@item.Title" width="150" height="150" style="object-fit:cover" />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Abstract)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Details" asp-route-slug="@item.Slug">Details</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
