@@ -75,7 +75,7 @@ namespace AmbroBlogProject.Controllers
             var ogComments = _context.Comments.Include(c => c.BlogUser).Include(c => c.Moderator).Include(c => c.Post);
 
             ViewData["MainText"] = "Comments";
-            ViewData["SubText"] = "All Unmoderated Comments";
+            ViewData["SubText"] = "All Site Comments";
             return View(await ogComments.ToListAsync());
         }
 

@@ -48,10 +48,7 @@
         <partial name="_Navbar" />
         <partial name="_MobileMenu" />
 
-        @*<h1>@ViewData["MainText"]</h1>
-        <span class="subheading">@ViewData["SubText"]</span>
-        @(@ViewData["HeaderImage"] == null ? $"/img/{_configuration["DefaultHeaderImage"]}" : ViewData["HeaderImage"])
-        *@
+       
 
         <!-- Main Content -->
         @RenderBody()
