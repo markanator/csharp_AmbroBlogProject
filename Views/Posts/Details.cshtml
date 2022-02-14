@@ -192,7 +192,7 @@
                                                                             <span class="comment-reply-link hover-flip-item-wrapper" href="#">
                                                                                 <span class="hover-flip-item">
                                                                                     <button 
-                                                                                        class="btn btn-sm"
+                                                                                        class="btn btn-sm btn-secondary"
                                                                                         data-text="Edit"
                                                                                         data-bs-toggle="modal" 
                                                                                         data-bs-target="#editModal-@(comment.Id)" 
@@ -203,13 +203,42 @@
                                                                             </span>
                                                                         </div>
                                                                    }
-                                                                    <div class="edit">
-                                                                        <a class="comment-reply-link hover-flip-item-wrapper" href="#">
-                                                                            <span class="hover-flip-item">
-                                                                                <span data-text="Moderate">Moderate</span>
+                                                                   @if (User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString())  && comment.Deleted == null)
+                                                                    {
+                                                                        <div class="edit ms-2">
+                                                                            <span class="comment-reply-link hover-flip-item-wrapper">
+                                                                                <span class="hover-flip-item">
+                                                                                    <button
+                                                                                        class="btn btn-sm btn-warning"
+                                                                                        data-text="Moderate"
+                                                                                        data-bs-toggle="modal" 
+                                                                                        data-bs-target="#moderate-@(comment.Id)">
+                                                                                        Moderate
+                                                                                    </button>
+                                                                                </span>
                                                                             </span>
-                                                                        </a>
-                                                                    </div>
+                                                                        </div>
+
+                                                                        <form asp-controller="Comments" asp-action="Delete" class="h-auto">
+                                                                            @Html.Hidden("Id", comment.Id)
+                                                                            @Html.Hidden("Slug", comment.Post.Slug)
+
+                                                                            <div class="edit ms-2">
+                                                                                <span class="comment-reply-link hover-flip-item-wrapper">
+                                                                                    <span class="hover-flip-item">
+                                                                                        <button
+                                                                                            class="btn btn-sm btn-danger"
+                                                                                            data-text="Delete"
+                                                                                            type="submit"
+                                                                                        >
+                                                                                            Delete
+                                                                                        </button>
+                                                                                    </span>
+                                                                                </span>
+                                                                            </div>
+                                                                        </form>
+                                                                    }
+                                                                    
                                                                 </div>
 
                                                             </div>
@@ -239,7 +268,93 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                 @**********************************************
+                                                        RENDER EDIT MODAL IF OWNER
+                                                  ***********************************************@
+                                                <div class="modal" id="editModal-@(comment.Id)">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">Editing Comment...</h4>
+
+                                                            </div>
+
+                                                            <!-- Modal body -->
+                                                            <div class="modal-body">
+                                                                <form asp-controller="Comments" asp-action="Edit">
+                                                                    @Html.Hidden("Id", comment.Id)
+
+                                                                    <div class="form-group">
+                                                                        <textarea name="Body" class="form-control" required>@comment.Body</textarea>
+                                                                    </div>
+
+                                                                    <button class="btn-sm btn-dark border-success font-weight-bold" type="submit">Submit</button>
+                                                                </form>
+                                                            </div>
+
+                                                            <!-- Modal footer -->
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn-sm btn-dark font-weight-bold" data-bs-dismiss="modal">Close</button>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                @**********************************************
+                                                        RENDER MODERATE MODAL
+                                                ***********************************************@
+                                                <div class="modal" id="moderate-@(comment.Id)">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+
+                                                            <!-- Modal Header -->
+                                                            <div class="modal-header">
+                                                                <h4 class="modal-title">Moderating Comment...</h4>
+
+                                                            </div>
+
+                                                            <!-- Modal body -->
+                                                            <div class="modal-body">
+                                                                <form asp-controller="Comments" asp-action="Moderate">
+                                                                    @Html.Hidden("Id", comment.Id)
+                                                                    @Html.Hidden("Body", comment.Body)
+
+                                                                    <div class="form-group">
+                                                                        <label class="control-label">Original Comment</label>
+                                                                        <textarea disabled class="form-control" style="resize:none">@comment.Body</textarea>
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label class="control-label">Moderated Comment</label>
+                                                                        <textarea required name="ModeratedBody" class="form-control">@comment.ModeratedBody</textarea>
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <label class="control-label">Reason For Moderation</label>
+                                                                        <select class="form-control" asp-for="@comment.ModerationType" name="ModerationType" asp-items="Html.GetEnumSelectList<ModerationType>()"></select>
+                                                                    </div>
+
+                                                                    <div class="form-group">
+                                                                        <div class="row">
+                                                                            <div class="col">
+                                                                                <button class="btn-sm w-100 btn-dark border-success font-weight-bold" type="submit">Submit</button>
+                                                                            </div>
+                                                                            <div class="col">
+                                                                                <button class="btn-sm w-100 btn-dark font-weight-bold" type="button" data-bs-dismiss="modal">Cancel</button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                </form>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </li>
+
                                         }
 
                                     </ul>
@@ -254,155 +369,3 @@
             </div>
         </div>
 </div>
-
-  <hr/>
-
-  <div class="container mx-auto">
-
-    <br />
-
-    <p id="commentSection" class="p-3 text-light font-weight-bold text-center rounded bg-dark w-100 mb-2">@Model.Post.Comments.Count COMMENT(S)</p>
-    @foreach (var comment in Model.Post.Comments.OrderByDescending(c => c.Created))
-    {
-        <div class="media media-border p-4 mb-2 bg-light">
-            <img class="mr-3 rounded-circle" 
-                 width="60" 
-                 height="60" 
-                 src="@imageService.DecodeImage(comment.BlogUser.ImageData, comment.BlogUser.ContentType)"
-                 alt="@comment.BlogUser.FullName"
-                 style="object-fit:cover;"
-            />
-            <div class="w-100">
-                <h4>@comment.BlogUser.FullName</h4>
-
-                
-
-                <div class="row">
-                    @if (comment.Moderated == null && comment.Deleted == null && comment.BlogUserId == userManager.GetUserId(User))
-                    {
-                        <hr>
-                        <button 
-                            data-toggle="modal" 
-                            data-target="#editModal-@(comment.Id)" 
-                            class="btn-sm btn-dark font-weight-bold mr-2"
-                        >
-                            EDIT
-                        </button>
-                    }
-
-                    @**********************************************
-                            RENDER MODERATE AND DELETE BUTTONS
-                    ***********************************************@
-
-                    @if (User.IsInRole(BlogRole.Moderator.ToString()) || User.IsInRole(BlogRole.Administrator.ToString())  && comment.Deleted == null)
-                    {
-                        <button 
-                            class="btn-sm btn-dark font-weight-bold mr-2 btn-warning" 
-                            data-toggle="modal" 
-                            data-target="#moderate-@(comment.Id)">Moderate</button>
-
-                        <form asp-controller="Comments" asp-action="Delete" class="h-auto">
-                            @Html.Hidden("Id", comment.Id)
-                            @Html.Hidden("Slug", comment.Post.Slug)
-                            <button class="btn-md btn-danger rounded btn-dark font-weight-bold" type="submit">Delete</button>
-                        </form>
-                    }
-                </div>
-
-            </div>
-        </div>
-
-         @**********************************************
-                RENDER EDIT MODAL IF OWNER
-          ***********************************************@
-        <div class="modal" id="editModal-@(comment.Id)">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Editing Comment...</h4>
-
-                    </div>
-
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                        <form asp-controller="Comments" asp-action="Edit">
-                            @Html.Hidden("Id", comment.Id)
-
-                            <div class="form-group">
-                                <textarea name="Body" class="form-control" required>@comment.Body</textarea>
-                            </div>
-
-                            <button class="btn-sm btn-dark border-success font-weight-bold" type="submit">Submit</button>
-                        </form>
-                    </div>
-
-                    <!-- Modal footer -->
-                    <div class="modal-footer">
-                        <button type="button" class="btn-sm btn-dark font-weight-bold" data-dismiss="modal">Close</button>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        @**********************************************
-                RENDER MODERATE MODAL
-        ***********************************************@
-        <div class="modal" id="moderate-@(comment.Id)">
-            <div class="modal-dialog">
-                <div class="modal-content">
-
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h4 class="modal-title">Moderating Comment...</h4>
-
-                    </div>
-
-                    <!-- Modal body -->
-                    <div class="modal-body">
-                        <form asp-controller="Comments" asp-action="Moderate">
-                            @Html.Hidden("Id", comment.Id)
-                            @Html.Hidden("Body", comment.Body)
-
-                            <div class="form-group">
-                                <label class="control-label">Original Comment</label>
-                                <textarea disabled class="form-control" style="resize:none">@comment.Body</textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label">Moderated Comment</label>
-                                <textarea required name="ModeratedBody" class="form-control">@comment.ModeratedBody</textarea>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="control-label">Reason For Moderation</label>
-                                <select class="form-control" asp-for="@comment.ModerationType" name="ModerationType" asp-items="Html.GetEnumSelectList<ModerationType>()"></select>
-                            </div>
-
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col">
-                                        <button class="btn-sm w-100 btn-dark border-success font-weight-bold" type="submit">Submit</button>
-                                    </div>
-                                    <div class="col">
-                                        <button class="btn-sm w-100 btn-dark font-weight-bold" type="button" data-dismiss="modal">Cancel</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    }
-
-
-  </div>
-
-
-
-  @*
-      1. display comments related to this post
-      2. Display authors image
-  *@
