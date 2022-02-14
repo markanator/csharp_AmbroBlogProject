@@ -81,6 +81,11 @@
                 <span asp-validation-for="ReadyStatus" class="text-danger"></span>
             </div>
 
+            <div class="form-check">
+                <input class="form-check-input" asp-for="isFeatured" type="checkbox" id="isFeatured"/> 
+                <label class="form-check-label" for="isFeatured">@Html.DisplayNameFor(model => model.isFeatured)</label>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary w-100" />
             </div>

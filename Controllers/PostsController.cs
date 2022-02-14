@@ -129,7 +129,7 @@ namespace AmbroBlogProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BlogId,Title,Abstract,Content,ReadyStatus,Image")] Post post, List<string> tagValues)
+        public async Task<IActionResult> Create([Bind("BlogId,Title,Abstract,Content,ReadyStatus,Image, isFeatured")] Post post, List<string> tagValues)
         {
             if (ModelState.IsValid)
             {
@@ -205,7 +205,7 @@ namespace AmbroBlogProject.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus")] Post post, IFormFile newImage, List<string> tagValues)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,BlogId,Title,Abstract,Content,ReadyStatus, isFeatured")] Post post, IFormFile newImage, List<string> tagValues)
         {
             if (id != post.Id)
             {
@@ -224,6 +224,7 @@ namespace AmbroBlogProject.Controllers
                     editedPost.Content = post.Content;
                     editedPost.ReadyStatus = post.ReadyStatus;
                     editedPost.BlogId = post.BlogId;
+                    editedPost.isFeatured = post.isFeatured;
 
                     var newSlug = _slugService.UrlFriendly(post.Title);
                     if (newSlug != editedPost.Slug)

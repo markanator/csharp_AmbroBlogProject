@@ -75,6 +75,12 @@
                 <span asp-validation-for="ReadyStatus" class="text-danger"></span>
             </div>
 
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="isFeatured" /> Feature this post on the homepage.
+                </label>
+            </div>
+
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary w-100" />
             </div>
