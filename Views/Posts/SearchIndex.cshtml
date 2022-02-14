@@ -5,10 +5,136 @@
 @using AmbroBlogProject.Services
 
 @inject UserManager<BlogUser> userManager
-@inject IImageService imageService
+@inject IImageService _imageService
 @model IPagedList<Post>
 
-<div class="row mx-0">
+@{
+    var cats = (List<Blog>)ViewData["Categories"];
+}
+
+<div class="main-wrapper">
+    <!-- Start Post List Wrapper  -->
+    <div class="axil-post-list-area post-listview-visible-color axil-section-gap bg-color-white">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-xl-8">
+                    @if (Model.Any())
+                    {
+                        @foreach (var post in Model)
+                        {
+                            <!-- Start Post List  -->
+                            <div class="content-block post-list-view axil-control is-active mt--30">
+                                <div class="post-thumbnail">
+                                    <a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">
+                                        <img src="@_imageService.DecodeImage(post.ImageDate, post.ContentType)"  alt="@post.Title">
+                                    </a>
+                                </div>
+                                <div class="post-content">
+                                    <div class="post-cat">
+                                        <div class="post-cat-list">
+                                            <a class="hover-flip-item-wrapper" asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@post.BlogId">
+                                                <span class="hover-flip-item">
+                                                    <span data-text="@post.Blog.Name">@post.Blog.Name</span>
+                                                </span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <h4 class="title"><a asp-action="Details" asp-controller="Posts" asp-route-slug="@post.Slug">@post.Title</a></h4>
+                                    <div class="post-meta-wrapper">
+                                        <div class="post-meta">
+                                            <div class="content">
+                                                <h6 class="post-author-name">
+                                                    <span class="hover-flip-item-wrapper">  @* TODO: was previously an anchor *@
+                                                        <span class="hover-flip-item">
+                                                            <span data-text="@post.BlogUser.FullName">@post.BlogUser.FullName</span>
+                                                        </span>
+                                                    </span>
+                                                </h6>
+                                                <ul class="post-meta-list">
+                                                    <li>@post.Created.ToString("MMM dd, yyyy")</li>
+                                                    @*<li>3 min read</li>*@
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        @*<ul class="social-share-transparent justify-content-end">
+                                            <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                            <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                                            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                            <li><a href="#"><i class="fas fa-link"></i></a></li>
+                                        </ul>*@
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Post List  -->
+                        }
+                    } 
+                    else
+                    {
+                        <div class="content-block post-list-view axil-control is-active mt--30">
+                            <h3>Nothing Found.</h3>
+                        </div>
+                    }
+                </div>
+
+                <div class="col-lg-4 col-xl-4 mt_md--40 mt_sm--40">
+                    <!-- Start Sidebar Area  -->
+                    <div class="sidebar-inner">
+
+                        <!-- Start Single Widget  -->
+                        <div class="axil-single-widget widget widget_categories mb--30">
+                            <ul>
+                                @foreach (var cat in cats)
+                               {
+                                <li class="cat-item">
+                                    <a asp-action="BlogPostIndex" asp-controller="Posts" asp-route-id="@cat.Id" class="inner">
+                                        <div class="thumbnail">
+                                            <img src="@_imageService.DecodeImage(cat.ImageData, cat.ContentType)" alt="@cat.Name" style="width:50px;height:50px;object-fit:cover;">
+                                        </div>
+                                        <div class="content overflow-hidden">
+                                            <h5 class="title text-nowrap text-truncate">@cat.Name</h5>
+                                        </div>
+                                    </a>
+                                </li>
+                               }
+                            </ul>
+                        </div>
+                        <!-- End Single Widget  -->
+
+                        <!-- Start Single Widget  -->
+                        <div class="axil-single-widget widget widget_search mb--30">
+                            <h5 class="widget-title">Search</h5>
+                            <form asp-action="SearchIndex" asp-controller="Posts">
+                                <div class="axil-search form-group">
+                                    <button type="submit" class="search-button"><i class="fas fa-search"></i></button>
+                                    <input type="text" name="SearchTerm"  class="form-control" placeholder="Search">
+                                </div>
+                            </form>
+                        </div>
+                        <!-- End Single Widget  -->
+
+                        <!-- Start Single Widget  -->
+                        <div class="axil-single-widget widget widget_social mb--30">
+                            <h5 class="widget-title">Stay In Touch</h5>
+                            <!-- Start Post List  -->
+                            <ul class="social-icon md-size justify-content-center">
+                                <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+                                <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="#"><i class="fab fa-slack"></i></a></li>
+                                <li><a href="#"><i class="fab fa-linkedin-in"></i></a></li>
+                            </ul>
+                            <!-- End Post List  -->
+                        </div>
+                        <!-- End Single Widget  -->
+                    </div>
+                    <!-- End Sidebar Area  -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div class="row mx-0">
     @foreach(var post in Model)
      {
         <div class=" col-sm-2 col-lg-4 mt-3">
@@ -52,4 +178,4 @@
                 })
         </div>
     </div>
-</div>
+</div>*@

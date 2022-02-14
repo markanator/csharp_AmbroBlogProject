@@ -49,6 +49,12 @@ namespace AmbroBlogProject.Controllers
             var pageSize = 5;
 
             var posts = _blogSearchService.Search(searchTerm);
+            var blogs = await _context.Blogs
+                            .Include(b => b.BlogUser)
+                            .OrderByDescending(b => b.Created)
+                            .ToListAsync();
+
+            ViewData["Categories"] = blogs;
 
             return View(await posts.ToPagedListAsync(pageNumber, pageSize));
         }
@@ -77,8 +83,40 @@ namespace AmbroBlogProject.Controllers
             var blog = await _context.Blogs
                 .FindAsync(id);
 
+            var blogs = await _context.Blogs
+                            .Include(b => b.BlogUser)
+                            .OrderByDescending(b => b.Created)
+                            .ToListAsync();
+
+            ViewData["Categories"] = blogs;
+
             ViewData["MainText"] = blog.Name;
             ViewData["SubText"] = blog.Description;
+            ViewData["BlogTitle"] = $"{blog.Name}";
+
+            return View(posts);
+        }
+
+        // GET: Posts/TagIndex?tag={tag}&page={n}
+        public async Task<IActionResult> TagIndex(string tag, int? page)
+        {
+            var pageNum = page ?? 1;
+            var pageSize = 6;
+
+            var allPostIds = _context.Tags.Where(t => t.Text == tag).Select(t => t.PostId);
+
+            var posts = await _context.Posts.Where(p => allPostIds
+                .Contains(p.Id))
+                .OrderByDescending(t => t.Created)
+                .ToPagedListAsync(pageNum, pageSize);
+
+            var blogs = await _context.Blogs
+                            .Include(b => b.BlogUser)
+                            .OrderByDescending(b => b.Created)
+                            .ToListAsync();
+
+            ViewData["Categories"] = blogs;
+            ViewData["TagTerm"] = $"Results for \"{tag}\"";
 
             return View(posts);
         }
