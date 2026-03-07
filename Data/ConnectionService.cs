@@ -23,8 +23,7 @@ namespace AmbroBlogProject.Data
                 Username = userInfo[0],
                 Password = userInfo[1],
                 Database = dbUri.LocalPath.TrimStart('/'),
-                SslMode = SslMode.Prefer,
-                TrustServerCertificate = true
+                SslMode = SslMode.Prefer
             }.ToString();
         }
     }

@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using X.PagedList;
+using X.PagedList.EF;
 
 namespace AmbroBlogProject.Controllers
 {
